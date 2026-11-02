@@ -2,143 +2,283 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>explore.cincinnati — Story: The night the bridge disappeared</title>
-<meta name="description" content="Photographs, fine-art prints and the stories behind them — Cincinnati, seen slowly. Test site.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F0E8">
+<title>The night the bridge disappeared — explore.cincinnati</title>
+<meta name="description" content="A story from explore.cincinnati — the full caption behind the photograph, the place it was taken, and the print.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="theme.css">
 <style>
-body{margin:0;background:#F3F2EE}
-a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
-.glass{background:rgba(255,255,255,0.58);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,0.8);box-shadow:inset 0 1px 0 rgba(255,255,255,0.95),0 12px 40px rgba(20,21,24,0.08)}
-.glass-dark{background:rgba(20,21,24,0.42);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);border:1px solid rgba(255,255,255,0.28);box-shadow:inset 0 1px 0 rgba(255,255,255,0.35),0 12px 40px rgba(20,21,24,0.18);color:#fff}
-@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
-@keyframes kb{from{transform:scale(1.08)}to{transform:scale(1)}}
-@keyframes mist{0%{transform:translateX(-18%)}100%{transform:translateX(18%)}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-.rise{animation:rise 1s cubic-bezier(.2,.7,.2,1) both}
-.d1{animation-delay:.12s}.d2{animation-delay:.24s}.d3{animation-delay:.36s}
-.kb{animation:kb 14s cubic-bezier(.2,.6,.2,1) both}
-.mist{animation:mist 16s ease-in-out infinite alternate}
-.live{animation:blink 2.4s ease-in-out infinite}
-.card img{transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
-.card:hover img{transform:scale(1.045)}
-.lift{transition:transform .6s cubic-bezier(.2,.7,.2,1),box-shadow .6s}
-.lift:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(20,21,24,0.14)}
-.btn{transition:transform .35s cubic-bezier(.2,.7,.2,1)}
-.btn:hover{transform:translateY(-2px)}
-@supports (animation-timeline: view()){.reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 35%}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  .crumbs { display: flex; flex-wrap: wrap; gap: 10px; font-size: .82rem; color: var(--muted); padding-top: clamp(28px, 4vw, 48px); }
+  .crumbs a:hover { color: var(--ink); }
+  .crumbs [aria-current] { color: var(--ink); }
+
+  .story-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 340px); gap: 32px 72px; align-items: end; padding-top: clamp(32px, 5vw, 64px); }
+  .story-head .h1 { font-size: clamp(3rem, 8.4vw, 8rem); line-height: .9; }
+  .story-kicker { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; margin-bottom: 24px; }
+  .story-kicker .num { font-size: 1.2rem; }
+  .story-standfirst { margin: 0; font-family: var(--serif); font-style: italic; font-size: clamp(1.3rem, 1.9vw, 1.65rem); line-height: 1.3; color: var(--ink-2); padding-bottom: 8px; }
+  @media (max-width: 860px) { .story-head { grid-template-columns: 1fr; } }
+
+  .story-hero { margin: clamp(36px, 5vw, 72px) 0 0; }
+  .story-hero .plate-frame { aspect-ratio: 16 / 9; }
+  .story-hero .plate-frame img { animation: settle 2.2s var(--ease) both; }
+  @keyframes settle { from { transform: scale(1.05); filter: blur(5px); } to { transform: none; filter: none; } }
+  .story-hero figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+  @media (max-width: 760px) { .story-hero .plate-frame { aspect-ratio: 4 / 5; } }
+
+  .story-body { display: grid; grid-template-columns: minmax(220px, 300px) minmax(0, 62ch); justify-content: space-between; gap: 48px clamp(40px, 7vw, 120px); align-items: start; }
+  .label-col { position: sticky; top: calc(var(--header-h) + 24px); display: flex; flex-direction: column; gap: 28px; }
+  .wall-label { margin: 0; display: grid; grid-template-columns: auto 1fr; border-top: 1px solid var(--ink); font-size: .88rem; }
+  .wall-label dt, .wall-label dd { margin: 0; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+  .wall-label dt { color: var(--muted); padding-right: 20px; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; padding-top: 12px; }
+  .own { display: grid; grid-template-columns: 64px 1fr auto; gap: 14px; align-items: center; padding: 14px; background: var(--white); border: 1px solid var(--rule); border-radius: 3px; transition: border-color .3s; }
+  .own:hover { border-color: var(--ink); }
+  .own img { width: 64px; height: 80px; object-fit: cover; border-radius: 2px; }
+  .own strong { display: block; font-size: .95rem; }
+  @media (max-width: 860px) { .story-body { grid-template-columns: 1fr; } .label-col { position: static; order: 2; } }
+
+  .article { font-size: 1.12rem; line-height: 1.72; color: var(--ink-2); }
+  .article p { margin: 0 0 1.25em; }
+  .article .first { font-size: 1.32rem; line-height: 1.55; color: var(--ink); }
+  .article .first::first-letter { float: left; font-family: var(--serif); font-size: 4.4em; line-height: .8; padding: .08em .1em 0 0; color: var(--amber-ink); }
+  .placeholder-note { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; padding: 6px 12px; border: 1px dashed var(--rule-strong); border-radius: 999px; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .pull { margin: 2em 0; padding: 0; border: 0; font-family: var(--serif); font-style: italic; font-size: clamp(1.8rem, 3.2vw, 2.6rem); line-height: 1.12; color: var(--ink); letter-spacing: -0.01em; }
+  .pull::before { content: ""; display: block; width: 48px; height: 2px; background: var(--amber); margin-bottom: 20px; }
+  .inline-fig { margin: 2.2em 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2em; }
+
+  .where { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
+  .where-copy { display: flex; flex-direction: column; gap: 22px; }
+  .where-links { display: flex; flex-wrap: wrap; gap: 10px; }
+  .spot-map { position: relative; aspect-ratio: 16 / 10; border-radius: 3px; overflow: hidden; background: var(--paper-2); }
+  .spot-map .leaflet-container { position: absolute; inset: 0; }
+  .spot-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 24px; }
+  .spot-empty .h2 { font-size: clamp(2rem, 4vw, 3rem); }
+  @media (max-width: 860px) { .where { grid-template-columns: 1fr; } .spot-map { aspect-ratio: 4 / 3; } }
+
+  .pager { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .pager a { display: flex; flex-direction: column; gap: 6px; padding: clamp(24px, 3vw, 40px) 0; min-width: 0; }
+  .pager a + a, .pager span + a { text-align: right; align-items: flex-end; border-left: 1px solid var(--rule); padding-left: 24px; }
+  .pager a:first-child { padding-right: 24px; }
+  .pager-title { font-family: var(--serif); font-size: clamp(1.4rem, 2.6vw, 2.2rem); line-height: 1.05; transition: color .3s; }
+  .pager a:hover .pager-title { color: var(--amber-ink); }
+
+  .walk-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px); }
+  .walk-grid .plate:nth-child(2) { margin-top: clamp(32px, 5vw, 80px); }
+  @media (max-width: 760px) {
+    .walk-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 16px; margin-inline: calc(-1 * var(--gutter)); padding: 0 var(--gutter) 8px; scrollbar-width: none; }
+    .walk-grid::-webkit-scrollbar { display: none; }
+    .walk-grid > * { flex: 0 0 78%; scroll-snap-align: start; margin-top: 0 !important; }
+  }
 </style>
-<link rel="stylesheet" href="site.css">
-<script src="dc.js"></script>
+<script src="js/site.js" defer></script>
+<script src="vendor/leaflet/leaflet.js" defer></script>
 </head>
 <body>
-<div id="app"></div>
-<template id="tpl">
-<div style="font-family: 'Instrument Sans', system-ui, sans-serif; color: #141518; background: #F3F2EE; min-height: 100vh; display: flex; flex-direction: column; -webkit-font-smoothing: antialiased">
 
-  <header style="position: sticky; top: 0; z-index: 5; padding: 14px 24px; display: flex; justify-content: center">
-    <div class="glass" style="width: 100%; max-width: 1320px; box-sizing: border-box; border-radius: 999px; padding: 8px 8px 8px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
-      <a href="index.html" style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px"><span class="live" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #0E5A6C"></span>explore.cincinnati</a>
-      <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; font-weight: 500">
-        <a href="collection.html" style="padding: 10px 14px; border-radius: 999px">Collection</a>
-        <a href="collection.html" style="padding: 10px 14px; border-radius: 999px; background: rgba(20,21,24,0.06)">Stories</a>
-        <a href="index.html" style="padding: 10px 14px; border-radius: 999px">Map</a>
-        <a href="index.html" style="padding: 10px 14px; border-radius: 999px">About</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="index.html" aria-label="explore.cincinnati, home"><span class="brand-dot" aria-hidden="true"></span>explore.cincinnati</a>
+    <nav id="primary-nav" class="nav" aria-label="Primary">
+      <a href="collection.html"><span class="nav-num">01</span>Collection</a>
+      <a href="collection.html#stories" aria-current="page"><span class="nav-num">02</span>Stories</a>
+      <a href="map.html"><span class="nav-num">03</span>Map</a>
+      <a href="index.html#about"><span class="nav-num">04</span>About</a>
+    </nav>
+    <div class="header-actions">
+      <a class="cart" href="print.html">Cart <span class="cart-count">0</span></a>
+      <button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path class="m1" d="M4 8.5h16"/><path class="m2" d="M4 15.5h16"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <article>
+    <div class="wrap">
+      <nav class="crumbs rise" aria-label="Breadcrumb">
+        <a href="collection.html#stories">Stories</a><span aria-hidden="true">/</span>
+        <a href="collection.html" data-f="room">Fog &amp; Night</a><span aria-hidden="true">/</span>
+        <span aria-current="page" data-f="no">No. 02</span>
       </nav>
-      <div style="display: flex; align-items: center; gap: 6px">
-        <a href="https://www.instagram.com/explore.cincinnati/" aria-label="Instagram" style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.12)"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle></svg></a>
-        <a href="print.html" class="btn" style="display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; background: #141518; color: #F3F2EE; border-radius: 999px; font-size: 14px; font-weight: 600">Cart · 0</a>
-      </div>
-    </div>
-  </header>
 
-  <!-- STORY HERO -->
-  <section style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 40px 40px 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
-    <nav aria-label="Breadcrumb" class="rise" style="font-size: 13px; color: #5E6168; display: flex; gap: 8px"><a href="collection.html" style="color: #5E6168">Stories</a><span>/</span><a href="collection.html" style="color: #5E6168">Fog &amp; Night</a><span>/</span><span style="color: #141518">No. 02</span></nav>
-    <div class="rise d1" style="position: relative; height: 720px; border-radius: 28px; overflow: hidden; background: #E6E4DE; box-shadow: 0 30px 80px rgba(20,21,24,0.12)">
-      <img class="kb" src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog, reflected in the Ohio River" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%">
-      <div class="mist" aria-hidden="true" style="position: absolute; left: 10%; top: 20%; width: 80%; height: 60%; background: radial-gradient(closest-side, rgba(255,255,255,0.4), rgba(255,255,255,0)); filter: blur(40px); pointer-events: none"></div>
-      <div class="glass-dark" style="position: absolute; left: 28px; right: 28px; bottom: 28px; max-width: 760px; border-radius: 22px; padding: 28px 30px; display: flex; flex-direction: column; gap: 12px">
-        <span style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.85">No. 02 · Roebling Bridge · [DATE] · 5 min read</span>
-        <h1 style="margin: 0; font-size: 56px; font-weight: 500; line-height: 1; letter-spacing: -0.035em">The night the bridge disappeared</h1>
-        <span style="font-size: 15px; opacity: 0.9">Covington landing, 11:40 pm. Fog so thick the far tower never showed up.</span>
-      </div>
-    </div>
-  </section>
+      <header class="story-head">
+        <div>
+          <div class="story-kicker rise">
+            <span class="num" data-f="no">No. 02</span>
+            <span class="eyebrow eyebrow--plain"><span data-f="place">Roebling Bridge, Covington landing</span> · <span data-f="date">Sep 20, 2026</span></span>
+          </div>
+          <h1 class="h1 rise d1" data-f="title">The night the bridge disappeared</h1>
+        </div>
+        <p class="story-standfirst rise d2" data-f="excerpt">[Caption excerpt — where he parked, what lens, why he waited for the fog to swallow the far tower…]</p>
+      </header>
 
-  <!-- BODY -->
-  <section style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 72px 40px 96px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 64px; align-items: flex-start">
-    <!-- Wall label -->
-    <aside class="glass rise d2" style="flex: 0 1 320px; border-radius: 22px; padding: 26px; display: flex; flex-direction: column; gap: 16px">
-      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 21px; font-weight: 400; color: #0E5A6C">Wall label</p>
-      <dl style="margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 10px 16px; font-size: 13px">
-        <dt style="color: #5E6168">Work</dt><dd style="margin: 0">Roebling, in the fog</dd>
-        <dt style="color: #5E6168">Shot</dt><dd style="margin: 0">[DATE], 11:40 pm</dd>
-        <dt style="color: #5E6168">Where</dt><dd style="margin: 0">Covington landing, KY</dd>
-        <dt style="color: #5E6168">Camera</dt><dd style="margin: 0">[CAMERA] · [LENS]</dd>
-        <dt style="color: #5E6168">Settings</dt><dd style="margin: 0">[f-stop] · [shutter] · ISO [N]</dd>
-        <dt style="color: #5E6168">Gallery</dt><dd style="margin: 0">Fog &amp; Night, Room I</dd>
-      </dl>
-      <a href="print.html" class="lift" style="display: flex; gap: 14px; align-items: center; padding: 12px; border-radius: 16px; background: #FFFFFF; color: #141518">
-        <span style="flex: 0 0 64px; height: 64px; border-radius: 10px; overflow: hidden; background: #E6E4DE; display: block"><img src="img/roebling-fog.webp" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block"></span>
-        <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">Own this print</span><span style="font-size: 12px; color: #5E6168">from $65 · signed &amp; numbered</span></span>
-        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: auto"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-      </a>
-      <a href="https://www.instagram.com/explore.cincinnati/" style="display: inline-flex; align-items: center; gap: 8px; color: #0E5A6C; font-size: 14px; font-weight: 600">See the original post
-        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-      </a>
-    </aside>
-    <!-- Caption as article -->
-    <article class="rise d3" style="flex: 1 1 520px; min-width: 0; max-width: 720px; font-size: 21px; line-height: 1.6; color: #2A2C31; display: flex; flex-direction: column; gap: 24px">
-      <p style="margin: 0; font-size: 26px; line-height: 1.45; color: #141518; font-weight: 500; letter-spacing: -0.01em">[The full Instagram caption lives here, formatted as proper paragraphs. The first paragraph is set larger as the lede.]</p>
-      <p style="margin: 0">[Second paragraph — the history of the Roebling: opened in 1866, the prototype for Brooklyn, why the fog settles on the river on nights like this one…]</p>
-      <figure style="margin: 12px 0; display: flex; flex-direction: column; gap: 10px">
-        <img src="img/skyline-fog.webp" alt="Downtown Cincinnati skyline in night fog" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px; display: block">
-        <figcaption style="font-size: 13px; color: #5E6168">Same night, from Smale Park — the city floating. Also on view as No. 01.</figcaption>
+      <figure class="story-hero plate rise d3">
+        <div class="plate-frame"><img data-f="image" src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog" fetchpriority="high"></div>
+        <figcaption>
+          <span class="meta"><span class="num" data-f="no">No. 02</span> · <span data-f="print">Roebling, in the fog</span> · Archival pigment print</span>
+          <a class="link" data-f="printUrl" href="print.html?id=roebling-fog">Available as a print <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </figcaption>
       </figure>
-      <p style="margin: 0">[Third paragraph — how the shot was made: the wait, the tripod, the car headlights that almost ruined it, the frame that finally worked.]</p>
-      <p style="margin: 0">[Closing — where to stand if you want to try it yourself, and the best months for river fog.]</p>
-      <div style="display: flex; flex-wrap: wrap; gap: 8px; padding-top: 8px">
-        <a href="collection.html" style="height: 38px; display: inline-flex; align-items: center; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.14); font-size: 13px; font-weight: 500">History</a>
-        <a href="collection.html" style="height: 38px; display: inline-flex; align-items: center; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.14); font-size: 13px; font-weight: 500">How it was shot</a>
-        <a href="collection.html" style="height: 38px; display: inline-flex; align-items: center; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.14); font-size: 13px; font-weight: 500">Fog</a>
-        <a href="index.html" style="height: 38px; display: inline-flex; align-items: center; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.14); font-size: 13px; font-weight: 500">On the map</a>
-      </div>
-    </article>
-  </section>
+    </div>
 
-  <!-- NEXT STORIES -->
-  <section class="reveal" style="background: #FFFFFF; border-top: 1px solid rgba(20,21,24,0.08)">
-    <div style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 80px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
-      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px">
-        <h2 style="margin: 0; font-size: 36px; font-weight: 500; letter-spacing: -0.03em">Keep walking</h2>
-        <a href="collection.html" style="font-size: 14px; font-weight: 600; color: #0E5A6C">All stories →</a>
+    <div class="section wrap">
+      <div class="story-body">
+        <aside class="label-col" aria-label="Wall label">
+          <p class="eyebrow">Wall label</p>
+          <dl class="wall-label">
+            <dt>Work</dt><dd data-f="print">Roebling, in the fog</dd>
+            <dt>Place</dt><dd data-f="place">Roebling Bridge, Covington landing</dd>
+            <dt>Area</dt><dd data-f="neighborhood">Covington, KY</dd>
+            <dt>Date</dt><dd data-f="date">Sep 20, 2026</dd>
+            <dt>Camera</dt><dd>[CAMERA] · [LENS]</dd>
+            <dt>Settings</dt><dd>[f-stop] · [shutter] · ISO [N]</dd>
+            <dt>Gallery</dt><dd data-f="room">Fog &amp; Night</dd>
+          </dl>
+          <a class="own" data-f="printUrl" href="print.html?id=roebling-fog">
+            <img data-f="image" src="img/roebling-fog.webp" alt="" loading="lazy" decoding="async">
+            <span><strong>Own this print</strong><span class="meta">from <span data-f="price">$65</span> · signed &amp; numbered</span></span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="link" data-f="instagram" href="https://www.instagram.com/explore.cincinnati/" target="_blank" rel="noopener">See the original post <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </aside>
+
+        <div class="article">
+          <span class="placeholder-note">Placeholder · full caption syncs from Instagram</span>
+          <p class="first">[The full Instagram caption lives here, formatted as proper paragraphs. The first paragraph is set larger as the lede.]</p>
+          <p>[Second paragraph — the history of the spot: when it was built, who built it, why the light falls the way it does on nights like this one…]</p>
+          <blockquote class="pull">[A line from the caption worth pulling out — the moment the shot came together.]</blockquote>
+          <p>[Third paragraph — how the shot was made: the wait, the tripod, the headlights that almost ruined it, the frame that finally worked.]</p>
+          <figure class="inline-fig plate">
+            <div class="plate-frame ratio-32"><img src="img/skyline-fog.webp" alt="Downtown Cincinnati skyline in night fog" loading="lazy" decoding="async"></div>
+            <figcaption class="meta">[Supporting frame from the same outing.]</figcaption>
+          </figure>
+          <p>[Closing — where to stand if you want to try it yourself, and the best time of year to go.]</p>
+          <div class="tags">
+            <a class="chip" href="collection.html#stories">History</a>
+            <a class="chip" href="collection.html#stories">How it was shot</a>
+            <a class="chip" href="collection.html" data-f="room">Fog &amp; Night</a>
+            <a class="chip" data-f="mapUrl" href="map.html#roebling-fog"><span class="dot"></span>On the map</a>
+          </div>
+        </div>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
-        <a href="story.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/tunnel-neon.webp" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168; padding: 0 4px">No. 03 · [Neighborhood]</span><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">A doorway to somewhere else</span></a>
-        <a href="story.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/bellevue-hill.webp" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168; padding: 0 4px">No. 04 · Bellevue Hill</span><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">The concrete lilypads nobody looks up at</span></a>
-        <a href="story.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/sugarcreek-clock.webp" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168; padding: 0 4px">No. 07 · Sugarcreek, OH</span><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">The world's largest cuckoo clock</span></a>
+    </div>
+  </article>
+
+  <!-- WHERE IT WAS TAKEN -->
+  <section class="section rule-top wrap" aria-labelledby="where-h">
+    <div class="where">
+      <div class="where-copy">
+        <p class="eyebrow">Where it was taken</p>
+        <h2 class="h2" id="where-h">Go stand <em>in the same place.</em></h2>
+        <p class="lede"><span data-f="place">Roebling Bridge, Covington landing</span><span data-f="hoodSuffix"> · Covington, KY</span></p>
+        <div class="where-links" id="where-links">
+          <a class="btn" data-f="mapUrl" href="map.html#roebling-fog">See it on the living map</a>
+          <a class="btn btn--ghost" id="directions" href="https://www.google.com/maps/dir/?api=1&amp;destination=39.0899,-84.5098" target="_blank" rel="noopener">Directions</a>
+        </div>
       </div>
+      <div class="spot-map" id="spot-map" role="img" aria-label="Map showing where the photograph was taken"></div>
     </div>
   </section>
 
-  <footer style="margin-top: auto; border-top: 1px solid rgba(20,21,24,0.1)">
-    <div style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 12px; color: #5E6168">
-      <span>© 2026 explore.cincinnati · All photographs © [PHOTOGRAPHER NAME]</span>
-      <span>Shipping · Returns · Privacy</span>
+  <!-- PREV / NEXT -->
+  <nav class="wrap" aria-label="More stories">
+    <div class="pager" id="pager"></div>
+  </nav>
+
+  <!-- KEEP WALKING -->
+  <section class="section wrap" aria-labelledby="walk-h">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">More from the feed</p>
+        <h2 class="h2" id="walk-h">Keep <em>walking.</em></h2>
+      </div>
+      <a class="link" href="collection.html#stories">All stories <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
-  </footer>
-</div>
-</template>
+    <div class="walk-grid" id="walk-grid"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col footer-about">
+        <span class="brand"><span class="brand-dot" aria-hidden="true"></span>explore.cincinnati</span>
+        <p class="meta" style="max-width:34ch;margin:8px 0 0;font-size:.9rem">Photographs and prints from the Queen City by [PHOTOGRAPHER NAME]. Printed locally, shipped everywhere.</p>
+      </div>
+      <nav class="footer-col" aria-label="Collection"><span class="eyebrow eyebrow--plain">Collection</span><a href="collection.html">All prints</a><a href="collection.html">Galleries</a><a href="print.html">Framing</a><a href="index.html#about">Gift cards</a></nav>
+      <nav class="footer-col" aria-label="Explore"><span class="eyebrow eyebrow--plain">Explore</span><a href="collection.html#stories">Stories</a><a href="map.html">The map</a><a href="index.html#about">About</a><a href="index.html#about">Licensing</a></nav>
+      <nav class="footer-col" aria-label="Follow"><span class="eyebrow eyebrow--plain">Follow</span><a href="https://www.instagram.com/explore.cincinnati/" target="_blank" rel="noopener">Instagram</a><a href="index.html#about">TikTok</a><a href="index.html#about">YouTube</a></nav>
+    </div>
+    <p class="footer-mark" aria-hidden="true">explore<em>.</em>cincinnati</p>
+    <div class="footer-base"><span>© 2026 explore.cincinnati · All photographs © [PHOTOGRAPHER NAME]</span><span>Shipping · Returns · Privacy</span></div>
+  </div>
+</footer>
+
 <script>
-class Component extends DCLogic {
-  renderVals() {
-    return {};
-  }
-}
-DC.mount(Component);
+document.addEventListener('DOMContentLoaded', function () {
+  var ARROW = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  EC.loadPosts().then(function (data) {
+    var posts = data.posts; // oldest → newest
+    var want = new URLSearchParams(location.search).get('id');
+    var idx = -1;
+    posts.forEach(function (p, i) { if (p.id === want) idx = i; });
+    if (idx < 0) posts.forEach(function (p, i) { if (p.id === 'roebling-fog') idx = i; });
+    if (idx < 0) idx = posts.length - 1;
+    var p = posts[idx];
+    var hood = p.neighborhood && p.neighborhood !== p.place ? p.neighborhood : '';
+
+    var vals = {
+      no: 'No. ' + EC.pad(p.no), title: p.title, place: p.place, date: EC.fmtDate(p.date), room: p.room,
+      excerpt: p.excerpt, print: p.print || p.title, price: p.price || '', neighborhood: hood || '—',
+      hoodSuffix: hood ? ' · ' + hood : ''
+    };
+    var hrefs = { printUrl: p.printUrl || 'print.html', instagram: p.instagram, mapUrl: 'map.html#' + p.id };
+    document.querySelectorAll('[data-f]').forEach(function (el) {
+      var k = el.getAttribute('data-f');
+      if (k === 'image') { el.src = p.image; if (el.alt) el.alt = p.alt; }
+      else if (k in hrefs) el.href = hrefs[k];
+      else if (k in vals) el.textContent = vals[k];
+    });
+    document.title = p.title + ' — explore.cincinnati';
+
+    /* Where it was taken */
+    var spot = document.getElementById('spot-map');
+    var dir = document.getElementById('directions');
+    if (p.pinned && window.L) {
+      dir.href = 'https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng;
+      var map = L.map(spot, { zoomControl: false, dragging: false, touchZoom: false, scrollWheelZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, tap: false })
+        .setView([p.lat, p.lng], 15);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19, detectRetina: true, attribution: '&copy; OpenStreetMap &copy; CARTO' }).addTo(map);
+      map.attributionControl.setPrefix(false);
+      L.marker([p.lat, p.lng], { keyboard: false, interactive: false, icon: L.divIcon({ className: 'pin-wrap', iconSize: [30, 30], iconAnchor: [15, 15], html: '<span class="pin is-latest is-active"><span class="pin-dot"></span><span class="pin-label">' + EC.esc(vals.no) + '</span></span>' }) }).addTo(map);
+    } else {
+      dir.remove();
+      spot.removeAttribute('role');
+      spot.innerHTML = '<div class="spot-empty"><p class="eyebrow eyebrow--plain">Location to come</p><p class="h2"><em>Somewhere</em> in the city.</p><p class="meta">This spot isn’t pinned yet — it will appear on the map once it is.</p></div>';
+    }
+
+    /* Prev / next by date */
+    var prev = posts[idx - 1], next = posts[idx + 1];
+    function pageLink(q, label) {
+      return '<a href="' + EC.esc(q.story) + '"><span class="eyebrow eyebrow--plain">' + label + '</span><span class="pager-title">' + EC.esc(q.title) + '</span><span class="meta">No. ' + EC.pad(q.no) + ' · ' + EC.esc(q.place) + '</span></a>';
+    }
+    document.getElementById('pager').innerHTML =
+      (prev ? pageLink(prev, '← Earlier') : '<span></span>') + (next ? pageLink(next, 'Later →') : '<span></span>');
+
+    /* Keep walking: three others, newest first */
+    var others = posts.slice().reverse().filter(function (q) { return q.id !== p.id; }).slice(0, 3);
+    document.getElementById('walk-grid').innerHTML = others.map(function (q) {
+      return '<a class="plate" href="' + EC.esc(q.story) + '">' +
+        '<span class="plate-frame ratio-45"><img src="' + EC.esc(q.image) + '" alt="' + EC.esc(q.alt) + '" loading="lazy" decoding="async"></span>' +
+        '<span class="plate-cap"><span class="num">No. ' + EC.pad(q.no) + '</span><span class="h3">' + EC.esc(q.title) + '</span>' +
+        '<span class="meta">' + EC.esc(q.place) + ' · ' + EC.fmtDate(q.date) + '</span></span></a>';
+    }).join('');
+  }).catch(function (err) { console.warn('[story] could not load posts', err); });
+});
 </script>
 </body>
 </html>

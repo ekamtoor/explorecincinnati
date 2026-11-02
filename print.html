@@ -2,246 +2,359 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>explore.cincinnati — Roebling, in the fog (print)</title>
-<meta name="description" content="Photographs, fine-art prints and the stories behind them — Cincinnati, seen slowly. Test site.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F0E8">
+<title>Roebling, in the fog — Print · explore.cincinnati</title>
+<meta name="description" content="Archival pigment print, signed and numbered — choose a size, paper and frame. explore.cincinnati.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="img/roebling-fog.webp" fetchpriority="high">
+<link rel="stylesheet" href="theme.css">
 <style>
-body{margin:0;background:#F3F2EE}
-a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
-.glass{background:rgba(255,255,255,0.58);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,0.8);box-shadow:inset 0 1px 0 rgba(255,255,255,0.95),0 12px 40px rgba(20,21,24,0.08)}
-@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.04)}100%{transform:scale(1)}}
-.rise{animation:rise 1s cubic-bezier(.2,.7,.2,1) both}
-.d1{animation-delay:.12s}
-.live{animation:blink 2.4s ease-in-out infinite}
-.frame{transition:max-width .8s cubic-bezier(.2,.7,.2,1),padding .6s,border .6s,background .6s,box-shadow .8s}
-.wall{transition:background .6s}
-.opt{transition:background .35s,border-color .35s,transform .35s}
-.opt:hover{transform:translateY(-2px)}
-.cta{transition:transform .35s cubic-bezier(.2,.7,.2,1),background .35s}
-.cta:hover{transform:translateY(-2px)}
-.cta:active{animation:pop .4s}
-.card img{transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
-.card:hover img{transform:scale(1.045)}
-@supports (animation-timeline: view()){.reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 35%}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  .product { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 88px); align-items: start; padding-top: clamp(24px, 4vw, 48px); padding-bottom: clamp(72px, 10vw, 140px); }
+  .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 18px; font-size: .82rem; color: var(--muted); }
+  .crumbs a { padding: 6px 0; color: var(--ink-2); }
+  .crumbs a:hover { color: var(--ink); }
+  .crumbs [aria-current] { color: var(--ink); }
+
+  /* The wall */
+  .stage { position: relative; aspect-ratio: 5 / 4; overflow: hidden; border-radius: 3px; background: var(--paper-2); display: flex; align-items: center; justify-content: center; transition: background .5s var(--ease); }
+  .stage.is-print { background: var(--white); }
+  .stage-light { position: absolute; top: -10%; left: 50%; width: 80%; height: 75%; transform: translateX(-50%); background: radial-gradient(ellipse at top, rgba(255,250,235,.9), rgba(255,250,235,0) 70%); pointer-events: none; transition: opacity .5s; }
+  .stage-floor { position: absolute; left: 0; right: 0; bottom: 0; height: 13%; background: linear-gradient(var(--paper-3), #D6D0C2); transition: opacity .5s; }
+  .stage-bench { position: absolute; bottom: 13%; left: 50%; width: 44%; height: 3.2%; transform: translateX(-50%); background: #2A2724; border-radius: 2px; transition: opacity .5s; }
+  .stage-bench::before, .stage-bench::after { content: ""; position: absolute; top: 100%; width: 2.5%; height: 330%; background: #2A2724; }
+  .stage-bench::before { left: 6%; } .stage-bench::after { right: 6%; }
+  .stage.is-print .stage-light, .stage.is-print .stage-floor, .stage.is-print .stage-bench { opacity: 0; }
+  .art { --w: 31; position: relative; z-index: 1; margin-bottom: 8%; width: calc(var(--w) * 1%); background: #F7F5EF; border: 0 solid transparent; box-shadow: 0 1px 2px rgba(22,23,25,.08), 0 30px 50px -18px rgba(22,23,25,.45); transition: width .6s var(--ease), border .4s var(--ease), padding .4s var(--ease), background .4s, margin .5s var(--ease); }
+  .stage.is-print .art { margin-bottom: 0; width: 46% !important; box-shadow: 0 1px 2px rgba(22,23,25,.08), 0 20px 40px -20px rgba(22,23,25,.3); }
+  .art img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+  .art.is-gloss::after { content: ""; position: absolute; inset: 0; background: linear-gradient(125deg, rgba(255,255,255,.22), rgba(255,255,255,0) 40%); pointer-events: none; }
+  .view-toggle { position: absolute; top: 16px; left: 16px; z-index: 2; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(243,240,232,.9); border: 1px solid var(--rule); }
+  .view-toggle .chip { height: 34px; border-color: transparent; }
+  .stage-cap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 24px; padding-top: 14px; }
+  .stage-cap strong { font-weight: 600; color: var(--ink); }
+
+  /* Configurator */
+  .buy { display: flex; flex-direction: column; gap: 28px; }
+  @media (min-width: 961px) { .buy { position: sticky; top: calc(var(--header-h) + 24px); } }
+  .buy-head { display: flex; flex-direction: column; gap: 14px; }
+  .buy-head .badge { align-self: flex-start; border: 1px solid var(--rule); }
+  .buy-head .h1 { font-size: clamp(2.8rem, 4.6vw, 4.6rem); }
+  .price-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; padding-top: 22px; border-top: 1px solid var(--rule); }
+  .price { font-family: var(--serif); font-size: clamp(2.6rem, 4vw, 3.4rem); line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+  legend { width: 100%; display: flex; justify-content: space-between; padding: 0; margin-bottom: 12px; font-size: .72rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+  legend .meta { letter-spacing: 0; text-transform: none; }
+  .tiles { display: grid; gap: 8px; }
+  .tiles--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tiles--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tile { position: relative; display: block; cursor: pointer; }
+  .tile input { position: absolute; opacity: 0; pointer-events: none; }
+  .tile-face { display: flex; flex-direction: column; gap: 2px; min-height: 64px; justify-content: center; padding: 12px 14px; border: 1px solid var(--rule); border-radius: 4px; background: transparent; transition: border-color .2s, background .2s, box-shadow .2s; }
+  .tile:hover .tile-face { border-color: var(--rule-strong); }
+  .tile input:checked + .tile-face { border-color: var(--ink); background: var(--white); box-shadow: inset 0 0 0 1px var(--ink); }
+  .tile input:focus-visible + .tile-face { outline: 2px solid var(--amber-ink); outline-offset: 2px; }
+  .tile-label { font-weight: 600; font-size: .95rem; display: flex; align-items: center; gap: 8px; }
+  .tile-sub { font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .swatch { width: 16px; height: 16px; border-radius: 2px; border: 1px solid var(--rule-strong); flex: none; }
+  .buy-actions { display: flex; flex-direction: column; gap: 10px; }
+  .buy-actions .btn { width: 100%; height: 54px; }
+  .btn.is-added { background: var(--amber-ink); border-color: var(--amber-ink); }
+  details { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  summary { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; cursor: pointer; font-weight: 600; font-size: .92rem; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary .plus { transition: transform .3s var(--ease); font-weight: 400; font-size: 1.3rem; line-height: 1; }
+  details[open] summary .plus { transform: rotate(45deg); }
+  details p { margin: 0 0 18px; color: var(--ink-2); font-size: .92rem; }
+
+  /* Wall label */
+  .label-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(40px, 7vw, 120px); align-items: start; }
+  .label-side { display: flex; flex-direction: column; gap: 24px; }
+  .spec { margin: 0; display: grid; grid-template-columns: auto 1fr; border-top: 1px solid var(--rule); font-size: .92rem; }
+  .spec dt, .spec dd { margin: 0; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+  .spec dt { color: var(--muted); padding-right: 32px; }
+  .label-links { display: flex; flex-wrap: wrap; gap: 14px 28px; }
+  .caption-prose { font-size: clamp(1.1rem, 1.6vw, 1.3rem); line-height: 1.6; color: var(--ink-2); }
+  .caption-prose p:first-child { font-family: var(--serif); font-size: 1.45em; line-height: 1.25; color: var(--ink); letter-spacing: -0.01em; }
+
+  /* Related */
+  .related { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); }
+  .related .plate .plate-frame { aspect-ratio: 4 / 5; }
+
+  @media (max-width: 960px) {
+    .product { grid-template-columns: 1fr; }
+    .label-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 760px) {
+    .stage { aspect-ratio: 4 / 5; }
+    .stage { padding-top: 56px; }
+    .view-toggle { top: 10px; left: 10px; }
+    .art { margin-bottom: 16%; width: calc(var(--w) * 1.32%); }
+    .stage.is-print .art { width: 66% !important; }
+    .tile-face { min-height: 52px; }
+    .related { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 16px; margin-inline: calc(-1 * var(--gutter)); padding: 0 var(--gutter) 8px; scrollbar-width: none; }
+    .related::-webkit-scrollbar { display: none; }
+    .related > * { flex: 0 0 70%; scroll-snap-align: start; }
+    .tiles--3 { grid-template-columns: 1fr; }
+  }
 </style>
-<link rel="stylesheet" href="site.css">
-<script src="dc.js"></script>
+<script src="js/site.js" defer></script>
 </head>
 <body>
-<div id="app"></div>
-<template id="tpl">
-<div style="font-family: 'Instrument Sans', system-ui, sans-serif; color: #141518; background: #F3F2EE; min-height: 100vh; display: flex; flex-direction: column; -webkit-font-smoothing: antialiased">
 
-  <header style="position: sticky; top: 0; z-index: 5; padding: 14px 24px; display: flex; justify-content: center">
-    <div class="glass" style="width: 100%; max-width: 1320px; box-sizing: border-box; border-radius: 999px; padding: 8px 8px 8px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
-      <a href="index.html" style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px"><span class="live" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #0E5A6C"></span>explore.cincinnati</a>
-      <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; font-weight: 500">
-        <a href="collection.html" style="padding: 10px 14px; border-radius: 999px; background: rgba(20,21,24,0.06)">Collection</a>
-        <a href="collection.html" style="padding: 10px 14px; border-radius: 999px">Stories</a>
-        <a href="index.html" style="padding: 10px 14px; border-radius: 999px">Map</a>
-        <a href="index.html" style="padding: 10px 14px; border-radius: 999px">About</a>
-      </nav>
-      <div style="display: flex; align-items: center; gap: 6px">
-        <a href="https://www.instagram.com/explore.cincinnati/" aria-label="Instagram" style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.12)"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle></svg></a>
-        <a href="print.html" class="cta" style="display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; background: #141518; color: #F3F2EE; border-radius: 999px; font-size: 14px; font-weight: 600">Cart · {{cartCount}}</a>
-      </div>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="index.html" aria-label="explore.cincinnati, home"><span class="brand-dot" aria-hidden="true"></span>explore.cincinnati</a>
+    <nav id="primary-nav" class="nav" aria-label="Primary">
+      <a href="collection.html" aria-current="page"><span class="nav-num">01</span>Collection</a>
+      <a href="collection.html#stories"><span class="nav-num">02</span>Stories</a>
+      <a href="map.html"><span class="nav-num">03</span>Map</a>
+      <a href="index.html#about"><span class="nav-num">04</span>About</a>
+    </nav>
+    <div class="header-actions">
+      <a class="cart" href="print.html">Cart <span class="cart-count">0</span></a>
+      <button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path class="m1" d="M4 8.5h16"/><path class="m2" d="M4 15.5h16"/></svg></button>
     </div>
-  </header>
+  </div>
+</header>
 
-  <!-- PRODUCT: preview stays put, options beside it -->
-  <section style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 20px 40px 72px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start">
-
-    <!-- The wall (sticky) -->
-    <div class="rise" style="flex: 1 1 560px; min-width: 0; position: sticky; top: 84px; display: flex; flex-direction: column; gap: 12px">
-      <nav aria-label="Breadcrumb" style="font-size: 13px; color: #5E6168; display: flex; gap: 8px"><a href="collection.html" style="color: #5E6168">Collection</a><span>/</span><a href="collection.html" style="color: #5E6168">Fog &amp; Night</a><span>/</span><span style="color: #141518">No. 02</span></nav>
-      <div class="wall" style="position: relative; background: {{wallBg}}; border-radius: 28px; padding: 48px; display: flex; align-items: center; justify-content: center; height: 640px; box-sizing: border-box; overflow: hidden">
-        <sc-if value="{{onWall}}" hint-placeholder-val="{{true}}">
-          <div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: #E2E0D9"></div>
-          <div aria-hidden="true" style="position: absolute; left: 50%; bottom: 80px; width: 180px; height: 10px; margin-left: -90px; background: rgba(20,21,24,0.12); filter: blur(10px)"></div>
-        </sc-if>
-        <div class="frame" style="position: relative; width: 100%; max-width: {{frameMax}}; padding: {{matPad}}; background: {{matColor}}; border: {{frameBorder}}; box-shadow: 0 34px 70px rgba(20,21,24,0.26)">
-          <img src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog, reflected in the river" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block">
+<main>
+  <section class="wrap product" aria-labelledby="print-title">
+    <!-- Preview -->
+    <div class="rise">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="collection.html">Collection</a><span aria-hidden="true">/</span><a id="crumb-room" href="collection.html">Fog &amp; Night</a><span aria-hidden="true">/</span><span id="crumb-no" aria-current="page">No. 02</span></nav>
+      <div class="stage" id="stage">
+        <span class="stage-light" aria-hidden="true"></span>
+        <span class="stage-floor" aria-hidden="true"></span>
+        <span class="stage-bench" aria-hidden="true"></span>
+        <div class="art" id="art">
+          <img id="art-img" src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog" fetchpriority="high">
         </div>
-        <!-- view toggle -->
-        <div role="group" aria-label="Preview" class="glass" style="position: absolute; left: 20px; top: 20px; display: inline-flex; padding: 5px; border-radius: 999px; gap: 3px">
-          <button type="button" onClick="{{showWall}}" class="opt" style="height: 36px; padding: 0 14px; border-radius: 999px; border: 0; background: {{wallBtnBg}}; color: {{wallBtnFg}}; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">On a wall</button>
-          <button type="button" onClick="{{showPrint}}" class="opt" style="height: 36px; padding: 0 14px; border-radius: 999px; border: 0; background: {{printBtnBg}}; color: {{printBtnFg}}; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Print only</button>
+        <div class="view-toggle" role="group" aria-label="Preview">
+          <button type="button" class="chip" data-view="wall" aria-pressed="true">On a wall</button>
+          <button type="button" class="chip" data-view="print" aria-pressed="false">Print only</button>
         </div>
-        <div class="glass" style="position: absolute; left: 20px; bottom: 20px; border-radius: 14px; padding: 10px 14px; display: flex; flex-direction: column; gap: 2px">
-          <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 15px; color: #5E6168">Your configuration</span>
-          <span style="font-size: 14px; font-weight: 600; color: #141518">{{sizeLabel}} in · {{paperLabel}} · {{frameLabel}}</span>
-        </div>
-        <span style="position: absolute; right: 20px; bottom: 20px; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 15px; color: #5E6168">{{scaleNote}}</span>
+      </div>
+      <div class="stage-cap">
+        <span class="meta"><span class="num">Your configuration</span> — <strong id="summary">12 × 16 in · Matte cotton · Unframed</strong></span>
+        <span class="meta" id="scale-note">To scale over a 4 ft bench</span>
       </div>
     </div>
 
-    <!-- Buy box (compact) -->
-    <div class="glass rise d1" style="flex: 1 1 380px; min-width: 0; max-width: 520px; margin-top: 30px; border-radius: 26px; padding: 28px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
-      <div style="display: flex; flex-direction: column; gap: 8px">
-        <p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 21px; color: #0E5A6C">No. 02 · Fog &amp; Night · Limited edition</p>
-        <h1 style="margin: 0; font-size: 46px; font-weight: 500; line-height: 1; letter-spacing: -0.035em">Roebling, in the fog</h1>
-        <p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 18px; color: #5E6168">Covington landing · [DATE] · Edition of [N], [N] remaining</p>
+    <!-- Configurator -->
+    <form class="buy rise d1" id="buy" onsubmit="return false">
+      <div class="buy-head">
+        <p class="eyebrow" id="print-eyebrow">No. 02 · Fog &amp; Night</p>
+        <span class="badge" id="print-badge"><span class="dot"></span><span id="print-badge-text">New</span></span>
+        <h1 class="h1" id="print-title">Roebling, <em>in the fog</em></h1>
+        <p class="meta" id="print-meta">Roebling Bridge, Covington landing · Edition of [N], [N] remaining</p>
+      </div>
+      <div class="price-row">
+        <span class="price" id="price">$95</span>
+        <span class="meta">Signed, numbered, certificate included</span>
       </div>
 
-      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; border-top: 1px solid rgba(20,21,24,0.1); padding-top: 16px">
-        <span style="font-size: 34px; font-weight: 500; letter-spacing: -0.03em; line-height: 1">{{price}}</span>
-        <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168">signed, numbered, certificate included</span>
-      </div>
-
-      <fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 8px">
-        <legend style="font-size: 13px; font-weight: 600; padding: 0; margin-bottom: 8px; display: flex; justify-content: space-between; width: 100%"><span>Size</span><span style="font-weight: 400; color: #5E6168">inches, image area</span></legend>
-        <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px">
-          <sc-for list="{{sizes}}" as="s" hint-placeholder-count="4">
-            <button type="button" onClick="{{s.pick}}" class="opt" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 56px; padding: 0 8px; border-radius: 14px; border: 1px solid {{s.borderColor}}; background: {{s.bg}}; color: #141518; font-family: inherit; cursor: pointer"><span style="font-size: 15px; font-weight: 600">{{s.label}}</span><span style="font-size: 12px; color: #5E6168">{{s.price}}</span></button>
-          </sc-for>
-        </div>
+      <fieldset>
+        <legend><span>Size</span><span class="meta">inches, image area</span></legend>
+        <div class="tiles tiles--2" id="sizes"></div>
+      </fieldset>
+      <fieldset>
+        <legend><span>Paper</span></legend>
+        <div class="tiles tiles--2" id="papers"></div>
+      </fieldset>
+      <fieldset>
+        <legend><span>Frame</span></legend>
+        <div class="tiles tiles--3" id="frames"></div>
       </fieldset>
 
-      <div style="display: flex; flex-wrap: wrap; gap: 20px">
-        <fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 8px; flex: 1 1 180px">
-          <legend style="font-size: 13px; font-weight: 600; padding: 0; margin-bottom: 8px">Paper</legend>
-          <div style="display: flex; flex-wrap: wrap; gap: 6px">
-            <sc-for list="{{papers}}" as="p" hint-placeholder-count="2">
-              <button type="button" onClick="{{p.pick}}" class="opt" style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid {{p.borderColor}}; background: {{p.bg}}; color: #141518; font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer"><span style="width: 12px; height: 12px; border-radius: 50%; background: {{p.swatch}}; border: 1px solid rgba(20,21,24,0.25)"></span>{{p.label}}</button>
-            </sc-for>
-          </div>
-        </fieldset>
-        <fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 8px; flex: 1 1 220px">
-          <legend style="font-size: 13px; font-weight: 600; padding: 0; margin-bottom: 8px">Frame</legend>
-          <div style="display: flex; flex-wrap: wrap; gap: 6px">
-            <sc-for list="{{frames}}" as="f" hint-placeholder-count="3">
-              <button type="button" onClick="{{f.pick}}" class="opt" style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid {{f.borderColor}}; background: {{f.bg}}; color: #141518; font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer"><span style="width: 12px; height: 12px; border-radius: 3px; background: {{f.swatch}}; border: 1px solid rgba(20,21,24,0.25)"></span>{{f.label}}<span style="color: #5E6168">{{f.price}}</span></button>
-            </sc-for>
-          </div>
-        </fieldset>
+      <div class="buy-actions">
+        <button type="button" class="btn" id="add">Add to cart · $95</button>
+        <button type="button" class="btn btn--ghost">Buy now · Apple Pay / Shop Pay</button>
+        <p class="meta" style="margin:6px 0 0">Ships in 3–5 business days from Cincinnati; framed in 7–10. 30-day returns. Free shipping over [AMOUNT].</p>
+        <p class="meta" role="status" id="cart-status" style="margin:0"></p>
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 8px">
-        <button type="button" onClick="{{addToCart}}" class="cta" style="height: 54px; border-radius: 999px; border: 0; background: {{ctaBg}}; color: #F3F2EE; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer">{{cta}}</button>
-        <button type="button" class="cta" style="height: 48px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.18); background: rgba(255,255,255,0.6); color: #141518; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Buy now · Apple Pay / Shop Pay</button>
-        <p style="margin: 4px 0 0; font-size: 13px; line-height: 1.5; color: #5E6168">Ships in 3–5 business days from Cincinnati; framed in 7–10. 30-day returns. Free shipping over [AMOUNT].</p>
-      </div>
-
-      <details style="border-top: 1px solid rgba(20,21,24,0.12); padding: 12px 0 0">
-        <summary style="cursor: pointer; font-size: 14px; font-weight: 500; list-style: none; display: flex; justify-content: space-between">Paper, printing &amp; the signed back<span aria-hidden="true">+</span></summary>
-        <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #5E6168">Printed on [PAPER NAME], a 100% cotton archival paper, with pigment inks rated 100+ years. A 0.5″ white border for matting; signed and numbered on the back with the edition stamp.</p>
+      <details>
+        <summary>Paper, printing &amp; the signed back <span class="plus" aria-hidden="true">+</span></summary>
+        <p>Printed on [PAPER NAME], a 100% cotton archival paper, with pigment inks rated 100+ years. A 0.5″ white border for matting; signed and numbered on the back with the edition stamp.</p>
       </details>
-    </div>
+    </form>
   </section>
 
-  <!-- WALL LABEL / STORY -->
-  <section class="reveal" style="background: #FFFFFF">
-    <div style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 88px 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 64px">
-      <div style="flex: 0 1 320px; display: flex; flex-direction: column; gap: 14px">
-        <p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 21px; color: #0E5A6C">Wall label</p>
-        <h2 style="margin: 0; font-size: 40px; font-weight: 500; line-height: 1.02; letter-spacing: -0.035em">The night the bridge disappeared</h2>
-        <dl style="margin: 10px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; font-size: 13px">
-          <dt style="color: #5E6168">Shot</dt><dd style="margin: 0">[DATE], 11:40 pm</dd>
-          <dt style="color: #5E6168">Where</dt><dd style="margin: 0">Covington landing, KY</dd>
-          <dt style="color: #5E6168">Camera</dt><dd style="margin: 0">[CAMERA] · [LENS]</dd>
-          <dt style="color: #5E6168">Settings</dt><dd style="margin: 0">[f-stop] · [shutter] · ISO [N]</dd>
+  <!-- Wall label -->
+  <section class="section rule-top wrap" aria-labelledby="label-h">
+    <div class="label-grid">
+      <div class="label-side reveal">
+        <p class="eyebrow">Wall label</p>
+        <h2 class="h2" id="label-h">The night the bridge disappeared</h2>
+        <dl class="spec">
+          <dt>Posted</dt><dd id="spec-date">Sep 20, 2026</dd>
+          <dt>Where</dt><dd id="spec-place">Roebling Bridge, Covington landing</dd>
+          <dt>Camera</dt><dd>[CAMERA] · [LENS]</dd>
+          <dt>Settings</dt><dd>[f-stop] · [shutter] · ISO [N]</dd>
         </dl>
-        <a href="story.html" style="margin-top: 8px; display: inline-flex; align-items: center; gap: 8px; color: #0E5A6C; font-size: 14px; font-weight: 600">Read the full story
-          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-        </a>
+        <div class="label-links">
+          <a class="link" id="story-link" href="story.html?id=roebling-fog">Read the full story <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="link" id="map-link" href="map.html#roebling-fog">Pinned on the map <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
       </div>
-      <div style="flex: 1 1 480px; min-width: 0; font-size: 20px; line-height: 1.6; display: flex; flex-direction: column; gap: 20px; color: #2A2C31">
-        <p style="margin: 0">[The Instagram caption, synced automatically. The first two paragraphs show here; the full text lives on the story page.]</p>
-        <p style="margin: 0">[Second paragraph — the history of the Roebling, the 1866 opening, why the fog sits on the river on nights like this one…]</p>
+      <div class="caption-prose reveal">
+        <p id="caption-lede">[Caption excerpt — where he parked, what lens, why he waited for the fog to swallow the far tower…]</p>
+        <p>[The Instagram caption, synced automatically. The first paragraphs show here; the full text lives on the story page.]</p>
       </div>
     </div>
   </section>
 
-  <!-- RELATED -->
-  <section class="reveal" style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 72px 40px 88px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px">
-    <h2 style="margin: 0; font-size: 34px; font-weight: 500; letter-spacing: -0.03em">Also in Fog &amp; Night</h2>
-    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
-      <a href="collection.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/skyline-fog.webp" alt="Fog over the Ohio" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 18px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">Fog over the Ohio</span><span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168; padding: 0 4px">No. 01 · from $65</span></a>
-      <a href="collection.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/tunnel-neon.webp" alt="A doorway to somewhere else" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 18px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">A doorway to somewhere else</span><span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168; padding: 0 4px">No. 03 · from $55</span></a>
-      <a href="collection.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/bellevue-hill.webp" alt="The concrete lilypads" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 18px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">The concrete lilypads</span><span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168; padding: 0 4px">No. 04 · from $55</span></a>
+  <!-- Related -->
+  <section class="section rule-top wrap" aria-labelledby="related-h" style="padding-bottom:clamp(72px,10vw,140px)">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Keep looking</p>
+        <h2 class="h2" id="related-h">Also in <em id="related-room">Fog &amp; Night</em></h2>
+      </div>
+      <a class="link" href="collection.html">The whole collection <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <div class="related" id="related">
+      <a class="plate" href="print.html?id=fog-over-the-ohio"><span class="plate-frame"><img src="img/skyline-fog.webp" alt="Fog over the Ohio" loading="lazy" decoding="async"></span><span class="plate-cap"><span class="num">No. 01</span><span class="h3">Fog over the Ohio</span><span class="meta">from $65</span></span></a>
+      <a class="plate" href="print.html?id=doorway"><span class="plate-frame"><img src="img/tunnel-neon.webp" alt="A doorway to somewhere else" loading="lazy" decoding="async"></span><span class="plate-cap"><span class="num">No. 03</span><span class="h3">A doorway to somewhere else</span><span class="meta">from $55</span></span></a>
+      <a class="plate" href="print.html?id=bellevue-hill"><span class="plate-frame"><img src="img/bellevue-hill.webp" alt="The concrete lilypads" loading="lazy" decoding="async"></span><span class="plate-cap"><span class="num">No. 04</span><span class="h3">The concrete lilypads</span><span class="meta">from $55</span></span></a>
     </div>
   </section>
+</main>
 
-  <footer style="margin-top: auto; border-top: 1px solid rgba(20,21,24,0.1)">
-    <div style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 12px; color: #5E6168">
-      <span>© 2026 explore.cincinnati · All photographs © [PHOTOGRAPHER NAME]</span>
-      <span>Shipping · Returns · Privacy</span>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col footer-about">
+        <span class="brand"><span class="brand-dot" aria-hidden="true"></span>explore.cincinnati</span>
+        <p class="meta" style="max-width:34ch;margin:8px 0 0;font-size:.9rem">Photographs and prints from the Queen City by [PHOTOGRAPHER NAME]. Printed locally, shipped everywhere.</p>
+      </div>
+      <nav class="footer-col" aria-label="Collection"><span class="eyebrow eyebrow--plain">Collection</span><a href="collection.html">All prints</a><a href="collection.html">Galleries</a><a href="print.html">Framing</a><a href="index.html#about">Gift cards</a></nav>
+      <nav class="footer-col" aria-label="Explore"><span class="eyebrow eyebrow--plain">Explore</span><a href="collection.html#stories">Stories</a><a href="map.html">The map</a><a href="index.html#about">About</a><a href="index.html#about">Licensing</a></nav>
+      <nav class="footer-col" aria-label="Follow"><span class="eyebrow eyebrow--plain">Follow</span><a href="https://www.instagram.com/explore.cincinnati/" target="_blank" rel="noopener">Instagram</a><a href="index.html#about">TikTok</a><a href="index.html#about">YouTube</a></nav>
     </div>
-  </footer>
-</div>
-</template>
+    <p class="footer-mark" aria-hidden="true">explore<em>.</em>cincinnati</p>
+    <div class="footer-base"><span>© 2026 explore.cincinnati · All photographs © [PHOTOGRAPHER NAME]</span><span>Shipping · Returns · Privacy</span></div>
+  </div>
+</footer>
+
 <script>
-class Component extends DCLogic {
-  constructor(props) {
-    super(props);
-    this.state = { size: 1, paper: 0, frame: 0, cart: 0, added: false, view: 'wall' };
+/* Print configurator — plain JS. Data comes from data/posts.json via EC.loadPosts(). */
+document.addEventListener('DOMContentLoaded', function () {
+  var $ = function (s) { return document.getElementById(s); };
+  var BASE = 65;                                     // the price table below is the $65 tier
+  var SIZES = [
+    { label: '8 × 10',  price: 65,  w: 24 },
+    { label: '12 × 16', price: 95,  w: 31 },
+    { label: '16 × 20', price: 140, w: 37 },
+    { label: '24 × 30', price: 240, w: 47 }
+  ];
+  var PAPERS = [
+    { label: 'Matte cotton', sub: 'Soft, no glare', mat: '#F7F5EF', gloss: false },
+    { label: 'Baryta gloss', sub: 'Deep blacks, light sheen', mat: '#FFFFFF', gloss: true }
+  ];
+  var FRAMES = [
+    { label: 'Unframed',    add: 0,  swatch: 'transparent', border: '0px solid transparent', pad: '0px' },
+    { label: 'Black oak',   add: 85, swatch: '#161719',     border: 'solid #161719',         pad: '7%' },
+    { label: 'Natural oak', add: 85, swatch: '#C9A77A',     border: 'solid #C9A77A',         pad: '7%' }
+  ];
+  var state = { size: 1, paper: 0, frame: 0, view: 'wall', cart: 0, base: BASE };
+
+  function priceFor(i) { var p = SIZES[i].price; return state.base === BASE ? p : Math.round(p * state.base / BASE / 5) * 5; }
+  function money(n) { return '$' + n; }
+
+  function tile(group, i, checked, label, sub, swatch) {
+    return '<label class="tile"><input type="radio" name="' + group + '" value="' + i + '"' + (checked ? ' checked' : '') + '>' +
+      '<span class="tile-face"><span class="tile-label">' + (swatch ? '<span class="swatch" style="background:' + swatch + '"></span>' : '') + label + '</span>' +
+      (sub ? '<span class="tile-sub">' + sub + '</span>' : '') + '</span></label>';
   }
-  renderVals() {
-    const sizeList = [
-      { label: '8 × 10', price: 65, max: '270px' },
-      { label: '12 × 16', price: 95, max: '350px' },
-      { label: '16 × 20', price: 140, max: '420px' },
-      { label: '24 × 30', price: 240, max: '520px' }
-    ];
-    const paperList = [
-      { label: 'Matte cotton', swatch: '#F3F2EE', mat: '#F7F6F2' },
-      { label: 'Baryta gloss', swatch: '#FFFFFF', mat: '#FFFFFF' }
-    ];
-    const frameList = [
-      { label: 'Unframed', price: '$0', add: 0, border: '0 solid transparent', pad: '0px', swatch: '#F3F2EE' },
-      { label: 'Black oak', price: '+$85', add: 85, border: '12px solid #141518', pad: '26px', swatch: '#141518' },
-      { label: 'Natural oak', price: '+$85', add: 85, border: '12px solid #C9A77A', pad: '26px', swatch: '#C9A77A' }
-    ];
-    const onB = '#141518', offB = 'rgba(20,21,24,0.14)';
-    const onBg = 'rgba(14,90,108,0.1)', offBg = 'rgba(255,255,255,0.65)';
-    const s = this.state;
-    const onWall = s.view === 'wall';
-    const sizes = sizeList.map((x, i) => ({
-      label: x.label, price: '$' + x.price,
-      borderColor: i === s.size ? onB : offB, bg: i === s.size ? onBg : offBg,
-      pick: () => this.setState({ size: i, added: false })
-    }));
-    const papers = paperList.map((x, i) => ({
-      label: x.label, swatch: x.swatch,
-      borderColor: i === s.paper ? onB : offB, bg: i === s.paper ? onBg : offBg,
-      pick: () => this.setState({ paper: i, added: false })
-    }));
-    const frames = frameList.map((x, i) => ({
-      label: x.label, price: x.price, swatch: x.swatch,
-      borderColor: i === s.frame ? onB : offB, bg: i === s.frame ? onBg : offBg,
-      pick: () => this.setState({ frame: i, added: false })
-    }));
-    const total = sizeList[s.size].price + frameList[s.frame].add;
-    return {
-      sizes, papers, frames,
-      price: '$' + total,
-      sizeLabel: sizeList[s.size].label,
-      paperLabel: paperList[s.paper].label,
-      frameLabel: frameList[s.frame].label,
-      frameMax: sizeList[s.size].max,
-      matColor: paperList[s.paper].mat,
-      matPad: frameList[s.frame].pad,
-      frameBorder: frameList[s.frame].border,
-      onWall,
-      wallBg: onWall ? '#ECEAE4' : '#FFFFFF',
-      scaleNote: onWall ? 'to scale on a 9 ft wall' : 'print only',
-      wallBtnBg: onWall ? '#141518' : 'transparent', wallBtnFg: onWall ? '#F3F2EE' : '#141518',
-      printBtnBg: onWall ? 'transparent' : '#141518', printBtnFg: onWall ? '#141518' : '#F3F2EE',
-      showWall: () => this.setState({ view: 'wall' }),
-      showPrint: () => this.setState({ view: 'print' }),
-      cartCount: s.cart,
-      cta: s.added ? 'Added to cart ✓' : 'Add to cart · $' + total,
-      ctaBg: s.added ? '#0E5A6C' : '#141518',
-      addToCart: () => this.setState({ cart: s.cart + 1, added: true })
-    };
+  function buildOptions() {
+    $('sizes').innerHTML = SIZES.map(function (s, i) { return tile('size', i, i === state.size, s.label, money(priceFor(i))); }).join('');
+    $('papers').innerHTML = PAPERS.map(function (p, i) { return tile('paper', i, i === state.paper, p.label, p.sub); }).join('');
+    $('frames').innerHTML = FRAMES.map(function (f, i) { return tile('frame', i, i === state.frame, f.label, f.add ? '+' + money(f.add) : 'Included', f.add ? f.swatch : ''); }).join('');
   }
-}
-DC.mount(Component);
+
+  function render() {
+    var size = SIZES[state.size], paper = PAPERS[state.paper], frame = FRAMES[state.frame];
+    var total = priceFor(state.size) + frame.add;
+    var art = $('art');
+    art.style.setProperty('--w', size.w);
+    art.style.background = paper.mat;
+    art.style.padding = frame.add ? frame.pad : '0px';
+    art.style.border = frame.add ? 'clamp(5px, ' + (0.9 + state.size * 0.15) + 'vw, 14px) ' + frame.border : frame.border;
+    art.classList.toggle('is-gloss', paper.gloss);
+    $('stage').classList.toggle('is-print', state.view === 'print');
+    document.querySelectorAll('[data-view]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === state.view)); });
+    $('summary').textContent = size.label + ' in · ' + paper.label + ' · ' + frame.label;
+    $('scale-note').textContent = state.view === 'wall' ? 'To scale over a 4 ft bench' : 'Print only';
+    $('price').textContent = money(total);
+    var add = $('add');
+    if (!add.classList.contains('is-added')) add.textContent = 'Add to cart · ' + money(total);
+  }
+
+  $('buy').addEventListener('change', function (e) {
+    var t = e.target; if (t.type !== 'radio') return;
+    state[t.name] = +t.value;
+    var add = $('add'); add.classList.remove('is-added');
+    render();
+  });
+  document.querySelectorAll('[data-view]').forEach(function (b) {
+    b.addEventListener('click', function () { state.view = b.getAttribute('data-view'); render(); });
+  });
+  $('add').addEventListener('click', function () {
+    state.cart++;
+    document.querySelectorAll('.cart-count').forEach(function (c) { c.textContent = state.cart; });
+    var add = $('add'); add.classList.add('is-added'); add.textContent = 'Added to cart ✓';
+    $('cart-status').textContent = SIZES[state.size].label + ' added — ' + state.cart + ' in your cart.';
+  });
+
+  buildOptions();
+  render();
+
+  /* Fill the page from posts.json for ?id= (default: the Roebling print). */
+  var id = new URLSearchParams(location.search).get('id') || 'roebling-fog';
+  if (!window.EC || !EC.loadPosts) return;
+  EC.loadPosts().then(function (data) {
+    var p = data.posts.filter(function (x) { return x.id === id; })[0];
+    if (!p) return;
+    var title = p.print || p.title;
+    var base = parseInt(String(p.price || '').replace(/[^0-9]/g, ''), 10);
+    state.base = base > 0 ? base : BASE;
+    document.title = title + ' — Print · explore.cincinnati';
+    var img = $('art-img'); img.src = p.image; img.alt = p.alt;
+    // Serif title with the words after the first comma (or the last word) set in italic.
+    var m = title.match(/^(.*?,)\s*(.+)$/);
+    $('print-title').innerHTML = m ? EC.esc(m[1]) + ' <em>' + EC.esc(m[2]) + '</em>' : EC.esc(title);
+    $('print-eyebrow').textContent = 'No. ' + EC.pad(p.no) + ' · ' + p.room;
+    if (p.badge) { $('print-badge-text').textContent = p.badge; $('print-badge').hidden = false; } else $('print-badge').hidden = true;
+    $('print-meta').textContent = p.place + ' · ' + EC.fmtDate(p.date) + ' · Edition of [N], [N] remaining';
+    $('crumb-room').textContent = p.room;
+    $('crumb-no').textContent = 'No. ' + EC.pad(p.no);
+    $('label-h').textContent = p.title;
+    $('spec-date').textContent = EC.fmtDate(p.date);
+    $('spec-place').textContent = p.place + (p.neighborhood && p.neighborhood !== p.place ? ' · ' + p.neighborhood : '');
+    $('caption-lede').textContent = p.excerpt;
+    $('story-link').href = p.story;
+    var ml = $('map-link');
+    if (p.pinned) { ml.href = 'map.html#' + p.id; ml.hidden = false; } else ml.hidden = true;
+
+    // Related: same room first, then the newest of the rest — three works.
+    var others = data.posts.filter(function (x) { return x.id !== p.id; });
+    var same = others.filter(function (x) { return x.room === p.room; });
+    var rest = others.filter(function (x) { return x.room !== p.room; }).reverse();
+    var picks = same.concat(rest).slice(0, 3);
+    $('related-room').textContent = same.length ? p.room : 'the collection';
+    $('related').innerHTML = picks.map(function (x) {
+      return '<a class="plate" href="' + EC.esc(x.printUrl || 'print.html?id=' + x.id) + '"><span class="plate-frame"><img src="' + EC.esc(x.image) + '" alt="' + EC.esc(x.alt) + '" loading="lazy" decoding="async"></span>' +
+        '<span class="plate-cap"><span class="num">No. ' + EC.pad(x.no) + '</span><span class="h3">' + EC.esc(x.print || x.title) + '</span><span class="meta">' + EC.esc(x.room) + ' · from ' + EC.esc(x.price) + '</span></span></a>';
+    }).join('');
+
+    buildOptions();
+    render();
+  }).catch(function () { /* static fallback stays */ });
+});
 </script>
 </body>
 </html>

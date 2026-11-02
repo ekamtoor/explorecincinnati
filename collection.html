@@ -2,212 +2,280 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>explore.cincinnati — Collection</title>
-<meta name="description" content="Photographs, fine-art prints and the stories behind them — Cincinnati, seen slowly. Test site.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F0E8">
+<title>explore.cincinnati — The collection</title>
+<meta name="description" content="Archival prints of Cincinnati, signed and numbered — and the stories behind each photograph.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
 <style>
-body{margin:0;background:#F3F2EE}
-a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
-.glass{background:rgba(255,255,255,0.58);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,0.8);box-shadow:inset 0 1px 0 rgba(255,255,255,0.95),0 12px 40px rgba(20,21,24,0.08)}
-@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
-@keyframes swapIn{from{opacity:0;transform:translateY(18px) scale(.985);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-.rise{animation:rise 1s cubic-bezier(.2,.7,.2,1) both}
-.d1{animation-delay:.12s}.d2{animation-delay:.24s}
-.live{animation:blink 2.4s ease-in-out infinite}
-.swap{animation:swapIn .7s cubic-bezier(.2,.7,.2,1) both}
-.swap>*{animation:swapIn .7s cubic-bezier(.2,.7,.2,1) both}
-.swap>*:nth-child(2){animation-delay:.06s}.swap>*:nth-child(3){animation-delay:.12s}.swap>*:nth-child(4){animation-delay:.18s}.swap>*:nth-child(5){animation-delay:.24s}.swap>*:nth-child(6){animation-delay:.3s}.swap>*:nth-child(7){animation-delay:.36s}
-.card img{transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
-.card:hover img{transform:scale(1.045)}
-.card .placard{transform:translateY(14px);opacity:0;transition:transform .55s cubic-bezier(.2,.7,.2,1),opacity .55s}
-.card:hover .placard,.card:focus-within .placard{transform:none;opacity:1}
-.pill{transition:background .4s,color .4s,transform .35s}
-.pill:hover{transform:translateY(-1px)}
-.btn{transition:transform .35s cubic-bezier(.2,.7,.2,1)}
-.btn:hover{transform:translateY(-2px)}
-.walk{scrollbar-width:none;scroll-behavior:smooth}.walk::-webkit-scrollbar{display:none}
-@keyframes approach{from{opacity:.45;transform:scale(.92) translateY(10px)}to{opacity:1;transform:none}}
-@supports (animation-timeline: view()){.room{animation:approach linear both;animation-timeline:view(inline);animation-range:entry 20% cover 48%}}
-@media (max-width:720px){.card .placard{transform:none;opacity:1}.room{flex-basis:100vw!important;flex-direction:column!important;gap:16px!important;height:auto!important;padding:48px 24px 120px!important}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  /* Intro */
+  .intro { padding-top: clamp(40px, 7vw, 96px); padding-bottom: clamp(32px, 5vw, 56px); display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 28px 64px; }
+  .intro-copy { display: flex; flex-direction: column; gap: 24px; }
+  .intro .lede { max-width: 40ch; }
+  .mode { justify-self: start; display: inline-flex; padding: 4px; border: 1px solid var(--rule); border-radius: 999px; }
+  .mode button { height: 42px; padding: 0 22px; border: 0; border-radius: 999px; background: transparent; font-size: .92rem; font-weight: 600; cursor: pointer; transition: background .25s, color .25s; }
+  .mode button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  @media (max-width: 860px) { .intro { grid-template-columns: 1fr; } }
+
+  .toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; padding-block: 20px; border-top: 1px solid var(--rule); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .toolbar-end { display: flex; align-items: center; gap: 20px; }
+  .count { font-family: var(--serif); font-style: italic; font-size: 1.15rem; color: var(--muted); white-space: nowrap; }
+  .walk-nav { display: flex; gap: 6px; }
+  .walk-nav button { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--rule-strong); border-radius: 999px; background: transparent; cursor: pointer; transition: background .25s, color .25s; }
+  .walk-nav button:hover { background: var(--ink); color: var(--paper); }
+
+  /* Gallery walk — works hung along one long wall */
+  .wall-band { position: relative; background: var(--paper-2); border-block: 1px solid var(--rule); }
+  .wall-band::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 64px; background: var(--paper-3); pointer-events: none; }
+  .walk { position: relative; z-index: 1; display: flex; gap: clamp(48px, 7vw, 120px); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); padding: clamp(56px, 7vw, 96px) var(--gutter) clamp(88px, 9vw, 112px); scrollbar-width: thin; scrollbar-color: var(--rule-strong) transparent; overscroll-behavior-x: contain; }
+  .walk:focus-visible { outline-offset: -4px; }
+  .work { flex: 0 0 clamp(280px, 30vw, 400px); scroll-snap-align: start; display: flex; flex-direction: column; gap: 28px; }
+  .work-frame { position: relative; display: block; padding: clamp(14px, 1.6vw, 22px); background: var(--white); border: clamp(8px, .8vw, 11px) solid var(--ink); box-shadow: 0 2px 0 rgba(0,0,0,.04), 0 36px 60px -24px rgba(22,23,25,.45); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
+  .work-frame:hover { transform: translateY(-5px); box-shadow: 0 2px 0 rgba(0,0,0,.04), 0 48px 70px -24px rgba(22,23,25,.5); }
+  .work-frame .plate-frame { border-radius: 0; }
+  .work-frame .badge { position: absolute; top: calc(clamp(14px, 1.6vw, 22px) + 10px); left: calc(clamp(14px, 1.6vw, 22px) + 10px); }
+  .label { display: flex; flex-direction: column; gap: 4px; max-width: 300px; padding-left: 14px; border-left: 1px solid var(--rule-strong); }
+  .label-title { margin: 2px 0 0; font-family: var(--serif); font-weight: 400; font-size: 1.55rem; line-height: 1.1; letter-spacing: -0.01em; }
+  .label-place { font-family: var(--serif); font-style: italic; color: var(--muted); }
+  .label-links { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; }
+  .label-links .link { font-size: .85rem; }
+  .label-links .link--quiet { font-weight: 500; color: var(--muted); }
+  .walk-end { flex: 0 0 1px; }
+  .walk-hint { padding-top: 14px; font-family: var(--serif); font-style: italic; color: var(--muted); }
+  @media (max-width: 760px) {
+    .walk { gap: 6vw; scroll-padding-inline: 8vw; padding-inline: 8vw; }
+    .work { flex-basis: 84vw; scroll-snap-align: center; }
+    .walk-nav { display: none; }
+  }
+
+  /* Stories */
+  .stories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(40px, 5vw, 72px) clamp(24px, 4vw, 64px); padding-top: clamp(32px, 4vw, 56px); }
+  .story-card { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: clamp(18px, 2.4vw, 32px); align-items: start; }
+  .story-card:hover .plate-frame img { transform: scale(1.035); }
+  .story-text { display: flex; flex-direction: column; gap: 12px; padding-top: 4px; }
+  .story-title { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(1.7rem, 2.6vw, 2.3rem); line-height: 1.02; letter-spacing: -0.015em; }
+  .story-excerpt { margin: 0; color: var(--ink-2); font-size: .95rem; line-height: 1.55; }
+  .story-card .link { align-self: flex-start; margin-top: 4px; }
+  @media (max-width: 960px) { .stories { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) { .story-card { grid-template-columns: 38% minmax(0, 1fr); gap: 16px; } .story-title { font-size: 1.45rem; } .story-excerpt { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-size: .88rem; } }
+
+  /* Loading */
+  .skel-row { display: flex; gap: clamp(48px, 7vw, 120px); overflow: hidden; padding: clamp(56px, 7vw, 96px) var(--gutter) clamp(88px, 9vw, 112px); }
+  .skel { flex: 0 0 clamp(280px, 30vw, 400px); aspect-ratio: 4 / 5; background: var(--paper-3); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .55; } }
+  @media (max-width: 760px) { .skel { flex-basis: 84vw; } }
+  .empty { padding: 48px 0; font-family: var(--serif); font-style: italic; font-size: 1.3rem; color: var(--muted); }
+
+  /* Promise strip */
+  .promise { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 32px; }
+  .promise > div { display: flex; flex-direction: column; gap: 8px; padding-top: 20px; border-top: 1px solid var(--rule); }
+  .promise .num { font-size: 1.05rem; }
+  .promise p { margin: 0; font-size: .92rem; color: var(--muted); line-height: 1.5; }
+  @media (max-width: 860px) { .promise { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; } }
 </style>
-<link rel="stylesheet" href="site.css">
-<script src="dc.js"></script>
+<script src="js/site.js" defer></script>
+<script src="dc.js" defer></script>
 </head>
 <body>
-<div id="app"></div>
-<template id="tpl">
-<div style="font-family: 'Instrument Sans', system-ui, sans-serif; color: #141518; background: #F3F2EE; min-height: 100vh; display: flex; flex-direction: column; -webkit-font-smoothing: antialiased">
 
-  <header style="position: sticky; top: 0; z-index: 5; padding: 14px 24px; display: flex; justify-content: center">
-    <div class="glass" style="width: 100%; max-width: 1320px; box-sizing: border-box; border-radius: 999px; padding: 8px 8px 8px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
-      <a href="index.html" style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px"><span class="live" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #0E5A6C"></span>explore.cincinnati</a>
-      <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; font-weight: 500">
-        <a href="collection.html" style="padding: 10px 14px; border-radius: 999px; background: rgba(20,21,24,0.06)">Collection</a>
-        <a href="collection.html" style="padding: 10px 14px; border-radius: 999px">Stories</a>
-        <a href="index.html" style="padding: 10px 14px; border-radius: 999px">Map</a>
-        <a href="index.html" style="padding: 10px 14px; border-radius: 999px">About</a>
-      </nav>
-      <div style="display: flex; align-items: center; gap: 6px">
-        <a href="https://www.instagram.com/explore.cincinnati/" aria-label="Instagram" style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.12)"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle></svg></a>
-        <a href="print.html" class="btn" style="display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; background: #141518; color: #F3F2EE; border-radius: 999px; font-size: 14px; font-weight: 600">Cart · 0</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="index.html" aria-label="explore.cincinnati, home"><span class="brand-dot" aria-hidden="true"></span>explore.cincinnati</a>
+    <nav id="primary-nav" class="nav" aria-label="Primary">
+      <a href="collection.html" aria-current="page"><span class="nav-num">01</span>Collection</a>
+      <a href="collection.html#stories"><span class="nav-num">02</span>Stories</a>
+      <a href="map.html"><span class="nav-num">03</span>Map</a>
+      <a href="index.html#about"><span class="nav-num">04</span>About</a>
+    </nav>
+    <div class="header-actions">
+      <a class="cart" href="print.html">Cart <span class="cart-count">0</span></a>
+      <button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path class="m1" d="M4 8.5h16"/><path class="m2" d="M4 15.5h16"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="app"></div>
+  <template id="tpl">
+    <section class="wrap intro">
+      <div class="intro-copy">
+        <p class="eyebrow rise">The collection</p>
+        <sc-if value="{{isPrints}}"><h1 class="h1 rise d1">Take the city <em>home.</em></h1></sc-if>
+        <sc-if value="{{isStories}}"><h1 class="h1 rise d1">The captions, <em>unabridged.</em></h1></sc-if>
+        <p class="lede rise d2">{{blurb}}</p>
+      </div>
+      <div class="mode rise d2" role="group" aria-label="View">
+        <button type="button" aria-pressed="{{isPrints}}" onClick="{{showPrints}}">Prints</button>
+        <button type="button" aria-pressed="{{isStories}}" onClick="{{showStories}}">Stories</button>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <div class="toolbar">
+        <div class="chips" role="group" aria-label="Filter by room">
+          <sc-for list="{{chips}}" as="c">
+            <button type="button" class="chip" aria-pressed="{{c.pressed}}" onClick="{{c.pick}}">{{c.label}}</button>
+          </sc-for>
+        </div>
+        <div class="toolbar-end">
+          <span class="count" aria-live="polite">{{countLabel}}</span>
+          <sc-if value="{{showWalkNav}}">
+            <div class="walk-nav">
+              <button type="button" aria-label="Previous work" onClick="{{walkBack}}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+              <button type="button" aria-label="Next work" onClick="{{walkNext}}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </div>
+          </sc-if>
+        </div>
       </div>
     </div>
-  </header>
 
-  <!-- HEADER + MODE SWITCH -->
-  <section style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 64px 40px 28px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
-    <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px">
-      <div style="display: flex; flex-direction: column; gap: 14px; max-width: 720px">
-        <p class="rise" style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 21px; font-weight: 400; color: #0E5A6C">The collection</p>
-        <h1 class="rise d1" style="margin: 0; font-size: 76px; font-weight: 500; line-height: 0.98; letter-spacing: -0.04em">{{heading}}</h1>
-        <p class="rise d2" style="margin: 0; font-size: 16px; line-height: 1.6; color: #5E6168">{{blurb}}</p>
-      </div>
-      <!-- Prints / Stories switch -->
-      <div role="group" aria-label="View" class="glass" style="display: inline-flex; padding: 6px; border-radius: 999px; gap: 4px">
-        <button type="button" onClick="{{showPrints}}" class="pill" style="height: 44px; padding: 0 22px; border-radius: 999px; border: 0; background: {{printsBg}}; color: {{printsFg}}; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Prints</button>
-        <button type="button" onClick="{{showStories}}" class="pill" style="height: 44px; padding: 0 22px; border-radius: 999px; border: 0; background: {{storiesBg}}; color: {{storiesFg}}; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Stories</button>
-      </div>
-    </div>
-    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
-      <div role="group" aria-label="Gallery" style="display: flex; flex-wrap: wrap; gap: 8px">
-        <sc-for list="{{filters}}" as="f" hint-placeholder-count="5">
-          <button type="button" onClick="{{f.pick}}" class="pill" style="height: 42px; padding: 0 18px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.12); background: {{f.bg}}; color: {{f.fg}}; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer">{{f.label}}</button>
-        </sc-for>
-      </div>
-      <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 17px; color: #5E6168">{{count}} {{noun}}</span>
+    <sc-if value="{{loading}}">
+      <div class="wall-band" aria-busy="true"><div class="skel-row"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+    </sc-if>
+
+    <sc-if value="{{showPrintsView}}">
+      <section class="wall-band" aria-label="Prints">
+        <div class="walk" ref="{{walkRef}}" tabindex="0" aria-label="Gallery walk — scroll sideways">
+          <sc-for list="{{shown}}" as="p">
+            <article class="work">
+              <a class="work-frame" href="{{p.printUrl}}" aria-label="{{p.print}} — view print">
+                <span class="plate-frame ratio-45"><img src="{{p.image}}" alt="{{p.alt}}" loading="lazy" decoding="async"></span>
+                <sc-if value="{{p.badge}}"><span class="badge"><span class="dot"></span>{{p.badge}}</span></sc-if>
+              </a>
+              <div class="label">
+                <span class="num">{{p.numLabel}}</span>
+                <h2 class="label-title">{{p.print}}</h2>
+                <span class="label-place">{{p.place}}</span>
+                <span class="meta">Archival print · from {{p.price}}</span>
+                <div class="label-links">
+                  <a class="link" href="{{p.printUrl}}">View print</a>
+                  <sc-if value="{{p.pinned}}"><a class="link link--quiet" href="{{p.mapUrl}}">Pinned on the map</a></sc-if>
+                </div>
+              </div>
+            </article>
+          </sc-for>
+          <div class="walk-end" aria-hidden="true"></div>
+        </div>
+      </section>
+      <div class="wrap"><p class="walk-hint">Scroll sideways to walk the gallery →</p></div>
+    </sc-if>
+
+    <sc-if value="{{showStoriesView}}">
+      <section class="wrap" aria-label="Stories">
+        <div class="stories">
+          <sc-for list="{{shown}}" as="s">
+            <a class="story-card" href="{{s.story}}">
+              <span class="plate-frame ratio-45"><img src="{{s.image}}" alt="{{s.alt}}" loading="lazy" decoding="async"></span>
+              <span class="story-text">
+                <span class="meta">{{s.numLabel}} · {{s.dateLabel}} · {{s.room}}</span>
+                <h2 class="story-title">{{s.title}}</h2>
+                <span class="label-place">{{s.place}}</span>
+                <p class="story-excerpt">{{s.excerpt}}</p>
+                <span class="link">Read the story</span>
+              </span>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isEmpty}}">
+      <div class="wrap"><p class="empty">Nothing hangs in this room yet — it’s coming.</p></div>
+    </sc-if>
+  </template>
+
+  <section class="section wrap" aria-label="About the prints" style="padding-top:clamp(48px,6vw,88px)">
+    <div class="promise">
+      <div><span class="num">01</span><h3 class="h3">Archival paper</h3><p>Cotton matte or baryta. Rated 100+ years.</p></div>
+      <div><span class="num">02</span><h3 class="h3">Signed &amp; numbered</h3><p>Hand-signed on the back, with the edition number.</p></div>
+      <div><span class="num">03</span><h3 class="h3">Framed locally</h3><p>Black or natural oak, built in [NEIGHBORHOOD].</p></div>
+      <div><span class="num">04</span><h3 class="h3">Easy returns</h3><p>30 days, no questions.</p></div>
     </div>
   </section>
+</main>
 
-  <!-- PRINTS VIEW: the gallery walk -->
-  <sc-if value="{{isPrints}}" hint-placeholder-val="{{true}}">
-  <section class="swap" style="padding: 0 0 96px; display: flex; flex-direction: column; gap: 18px">
-    <div style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 0 40px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; gap: 16px">
-      <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 17px; color: #5E6168">Scroll sideways to walk the gallery</span>
-      <div style="display: flex; gap: 6px">
-        <button type="button" onClick="{{walkBack}}" aria-label="Previous work" class="glass btn" style="width: 44px; height: 44px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: #141518; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></button>
-        <button type="button" onClick="{{walkNext}}" aria-label="Next work" class="glass btn" style="width: 44px; height: 44px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: #141518; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col footer-about">
+        <span class="brand"><span class="brand-dot" aria-hidden="true"></span>explore.cincinnati</span>
+        <p class="meta" style="max-width:34ch;margin:8px 0 0;font-size:.9rem">Photographs and prints from the Queen City by [PHOTOGRAPHER NAME]. Printed locally, shipped everywhere.</p>
       </div>
+      <nav class="footer-col" aria-label="Collection"><span class="eyebrow eyebrow--plain">Collection</span><a href="collection.html">All prints</a><a href="collection.html">Galleries</a><a href="print.html">Framing</a><a href="index.html#about">Gift cards</a></nav>
+      <nav class="footer-col" aria-label="Explore"><span class="eyebrow eyebrow--plain">Explore</span><a href="collection.html#stories">Stories</a><a href="map.html">The map</a><a href="index.html#about">About</a><a href="index.html#about">Licensing</a></nav>
+      <nav class="footer-col" aria-label="Follow"><span class="eyebrow eyebrow--plain">Follow</span><a href="https://www.instagram.com/explore.cincinnati/" target="_blank" rel="noopener">Instagram</a><a href="index.html#about">TikTok</a><a href="index.html#about">YouTube</a></nav>
     </div>
-    <div ref="{{walkRef}}" class="walk" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 calc(50% - 360px); padding: 0 calc(50% - 360px); background: #ECEAE4; border-top: 1px solid rgba(20,21,24,0.06); border-bottom: 1px solid rgba(20,21,24,0.06)">
-      <sc-for list="{{prints}}" as="p" hint-placeholder-count="6">
-        <article class="room" style="flex: 0 0 720px; scroll-snap-align: center; position: relative; height: 640px; display: flex; align-items: center; justify-content: center; gap: 36px; padding: 0 40px; box-sizing: border-box; border-left: 1px solid rgba(20,21,24,0.06)">
-          <div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 96px; background: #E2E0D9"></div>
-          <span style="position: absolute; top: 22px; left: 40px; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168">{{p.num}}</span>
-          <a href="print.html" class="card" style="position: relative; display: block; width: 360px; padding: 16px; background: #FFFFFF; border: 10px solid #141518; box-shadow: 0 40px 70px rgba(20,21,24,0.28); overflow: hidden">
-            <span style="display: block; overflow: hidden"><img src="{{p.img}}" alt="{{p.alt}}" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span>
-            <sc-if value="{{p.badge}}" hint-placeholder-val="{{true}}">
-              <span class="glass" style="position: absolute; top: 26px; left: 26px; padding: 5px 11px; border-radius: 999px; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 14px; color: #141518">{{p.badge}}</span>
-            </sc-if>
-          </a>
-          <div class="glass" style="position: relative; width: 200px; border-radius: 16px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; color: #141518">
-            <h2 style="margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.2">{{p.title}}</h2>
-            <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168">{{p.place}}</span>
-            <span style="font-size: 13px; color: #5E6168">Archival print · {{p.price}}</span>
-            <a href="print.html" style="margin-top: 6px; font-size: 13px; font-weight: 600; color: #0E5A6C">View print →</a>
-          </div>
-        </article>
-      </sc-for>
-      <div aria-hidden="true" style="flex: 0 0 1px"></div>
-    </div>
-  </section>
-  </sc-if>
+    <p class="footer-mark" aria-hidden="true">explore<em>.</em>cincinnati</p>
+    <div class="footer-base"><span>© 2026 explore.cincinnati · All photographs © [PHOTOGRAPHER NAME]</span><span>Shipping · Returns · Privacy</span></div>
+  </div>
+</footer>
 
-  <!-- STORIES VIEW -->
-  <sc-if value="{{isStories}}" hint-placeholder-val="{{false}}">
-  <section style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 0 40px 96px; box-sizing: border-box">
-    <div class="swap" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px">
-      <sc-for list="{{stories}}" as="s" hint-placeholder-count="4">
-        <a href="story.html" class="card" style="display: flex; gap: 20px; padding: 16px; border-radius: 22px; background: #FFFFFF; box-shadow: 0 10px 30px rgba(20,21,24,0.06); color: #141518">
-          <span style="flex: 0 0 180px; aspect-ratio: 4 / 5; border-radius: 14px; overflow: hidden; background: #E6E4DE; display: block"><img src="{{s.img}}" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block"></span>
-          <span style="display: flex; flex-direction: column; gap: 10px; min-width: 0; padding: 6px 4px">
-            <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168">{{s.place}}</span>
-            <span style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.15">{{s.title}}</span>
-            <span style="font-size: 14px; line-height: 1.55; color: #5E6168; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden">{{s.excerpt}}</span>
-            <span style="margin-top: auto; font-size: 13px; font-weight: 600; color: #0E5A6C">Read →</span>
-          </span>
-        </a>
-      </sc-for>
-    </div>
-  </section>
-  </sc-if>
-
-  <!-- HOW PRINTS ARE MADE -->
-  <section style="background: #FFFFFF; border-top: 1px solid rgba(20,21,24,0.08)">
-    <div style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 80px 40px; box-sizing: border-box; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px">
-      <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 13px; font-weight: 600; letter-spacing: 0.14em; color: #0E5A6C">01</span><h3 style="margin: 0; font-size: 17px; font-weight: 600">Archival paper</h3><p style="margin: 0; font-size: 14px; line-height: 1.55; color: #5E6168">Cotton matte or baryta. Rated 100+ years.</p></div>
-      <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 13px; font-weight: 600; letter-spacing: 0.14em; color: #0E5A6C">02</span><h3 style="margin: 0; font-size: 17px; font-weight: 600">Signed &amp; numbered</h3><p style="margin: 0; font-size: 14px; line-height: 1.55; color: #5E6168">Hand-signed on the back, with the edition number.</p></div>
-      <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 13px; font-weight: 600; letter-spacing: 0.14em; color: #0E5A6C">03</span><h3 style="margin: 0; font-size: 17px; font-weight: 600">Framed locally</h3><p style="margin: 0; font-size: 14px; line-height: 1.55; color: #5E6168">Black or natural oak, built in [NEIGHBORHOOD].</p></div>
-      <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 13px; font-weight: 600; letter-spacing: 0.14em; color: #0E5A6C">04</span><h3 style="margin: 0; font-size: 17px; font-weight: 600">Easy returns</h3><p style="margin: 0; font-size: 14px; line-height: 1.55; color: #5E6168">30 days, no questions.</p></div>
-    </div>
-  </section>
-
-  <footer style="margin-top: auto; border-top: 1px solid rgba(20,21,24,0.1)">
-    <div style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 12px; color: #5E6168">
-      <span>© 2026 explore.cincinnati · All photographs © [PHOTOGRAPHER NAME]</span>
-      <span>Shipping · Returns · Privacy</span>
-    </div>
-  </footer>
-</div>
-</template>
 <script>
-class Component extends DCLogic {
-  constructor(props) {
-    super(props);
-    this.state = { mode: 'prints', col: 'All' };
-    this.walkEl = null;
-    this.walkRef = (el) => { this.walkEl = el; };
+document.addEventListener('DOMContentLoaded', function () {
+  function modeFromHash() { return location.hash === '#stories' ? 'stories' : 'prints'; }
+
+  class Collection extends DCLogic {
+    constructor(props) {
+      super(props);
+      this.state = { mode: modeFromHash(), room: 'All', posts: null, rooms: [] };
+      this.walkEl = null;
+      this.walkRef = (el) => { this.walkEl = el; };
+    }
+    componentDidMount() {
+      EC.loadPosts().then((d) => this.setState({ posts: d.posts.slice().reverse(), rooms: d.rooms }))
+        .catch(() => this.setState({ posts: [], rooms: [] }));
+      window.addEventListener('hashchange', () => this.setState({ mode: modeFromHash() }));
+    }
+    setMode(mode) {
+      history.replaceState(null, '', mode === 'stories' ? '#stories' : location.pathname);
+      this.setState({ mode });
+    }
+    walk(dir) {
+      const el = this.walkEl;
+      if (!el) return;
+      const work = el.querySelector('.work');
+      const step = work ? work.getBoundingClientRect().width + parseFloat(getComputedStyle(el).columnGap || 0) : el.clientWidth * 0.8;
+      el.scrollBy({ left: dir * step, behavior: 'smooth' });
+    }
+    renderVals() {
+      const { mode, room, posts, rooms } = this.state;
+      const isPrints = mode === 'prints';
+      const loading = posts === null;
+      const all = posts || [];
+      const shown = (room === 'All' ? all : all.filter((p) => p.room === room)).map((p) => Object.assign({}, p, {
+        numLabel: 'No. ' + EC.pad(p.no),
+        dateLabel: EC.fmtDate(p.date),
+        mapUrl: 'map.html#' + p.id,
+        print: p.print || p.title
+      }));
+      const n = shown.length;
+      const noun = isPrints ? (n === 1 ? 'work' : 'works') : (n === 1 ? 'story' : 'stories');
+      return {
+        isPrints, isStories: !isPrints, loading,
+        blurb: isPrints
+          ? 'Archival prints, signed and numbered. Each one links back to the story of how it was made — and to the spot on the map where it was taken.'
+          : 'Every post becomes a story the moment it is published — the full caption, the place, the settings, the print.',
+        chips: ['All'].concat(rooms).map((label) => ({ label, pressed: label === room, pick: () => this.setState({ room: label }) })),
+        countLabel: loading ? '' : n + ' ' + noun,
+        shown,
+        showWalkNav: isPrints && n > 1,
+        showPrintsView: !loading && isPrints && n > 0,
+        showStoriesView: !loading && !isPrints && n > 0,
+        isEmpty: !loading && n === 0,
+        walkRef: this.walkRef,
+        walkNext: () => this.walk(1),
+        walkBack: () => this.walk(-1),
+        showPrints: () => this.setMode('prints'),
+        showStories: () => this.setMode('stories')
+      };
+    }
   }
-  walk(dir) {
-    if (this.walkEl) this.walkEl.scrollBy({ left: dir * 720, behavior: 'smooth' });
-  }
-  renderVals() {
-    const works = [
-      { num: 'No. 02', title: 'Roebling, in the fog', place: 'Roebling Bridge', col: 'Fog & Night', price: '$65', badge: 'New', img: 'img/roebling-fog.webp', alt: 'Roebling Suspension Bridge tower lit amber in thick fog', story: 'The night the bridge disappeared', excerpt: '[Caption excerpt — where he parked, what lens, why he waited for the fog to swallow the far tower…]', read: '5 min' },
-      { num: 'No. 01', title: 'Fog over the Ohio', place: 'Smale Park', col: 'Fog & Night', price: '$65', badge: '', img: 'img/skyline-fog.webp', alt: 'Downtown skyline glowing through night fog, reflected in the river', story: 'When the city floats', excerpt: '[Caption excerpt — a river inversion, the tower lights, the quiet at Smale at midnight…]', read: '4 min' },
-      { num: 'No. 03', title: 'A doorway to somewhere else', place: '[Neighborhood]', col: 'Fog & Night', price: '$55', badge: 'Limited', img: 'img/tunnel-neon.webp', alt: 'A pedestrian tunnel glowing blue under a red-haloed streetlight', story: 'A doorway to somewhere else', excerpt: '[Caption excerpt — the mural, the sodium light turning the fog red, the tunnel that lights up blue at night…]', read: '3 min' },
-      { num: 'No. 04', title: 'The concrete lilypads', place: 'Bellevue Hill', col: 'Autumn', price: '$55', badge: '', img: 'img/bellevue-hill.webp', alt: 'Concrete canopy at Bellevue Hill Park framing the skyline', story: 'The concrete lilypads nobody looks up at', excerpt: '[Caption excerpt — the 1970s overlook, the architect, why the city almost tore it down…]', read: '6 min' },
-      { num: 'No. 05', title: 'Upside down, Spring Grove', place: 'Spring Grove', col: 'Reflections', price: '$55', badge: '', img: 'img/spring-grove-reflect.webp', alt: 'A columned mausoleum reflected upside down in a pond', story: 'The reflection was sharper', excerpt: '[Caption excerpt — the second-largest cemetery in the country, the lake, and why he flipped the frame…]', read: '4 min' },
-      { num: 'No. 06', title: 'Golden hour, flipped', place: 'Spring Grove', col: 'Reflections', price: '$55', badge: '', img: 'img/spring-grove-autumn.webp', alt: 'Autumn trees and a white temple reflected in still water', story: 'Golden hour, flipped', excerpt: '[Caption excerpt — the last light in October, the stillness of the water, the temple…]', read: '3 min' },
-      { num: 'No. 07', title: 'The Sugarcreek clock', place: 'Sugarcreek, OH', col: 'Day trips', price: '$45', badge: '', img: 'img/sugarcreek-clock.webp', alt: 'The world’s largest cuckoo clock in Sugarcreek, Ohio', story: 'The world’s largest cuckoo clock', excerpt: '[Caption excerpt — two hours north, Amish country, and the band that plays every half hour…]', read: '4 min' }
-    ];
-    const names = ['All', 'Fog & Night', 'Autumn', 'Reflections', 'Day trips'];
-    const { mode, col } = this.state;
-    const isPrints = mode === 'prints';
-    const shown = col === 'All' ? works : works.filter((w) => w.col === col);
-    const filters = names.map((n) => ({
-      label: n,
-      bg: n === col ? '#141518' : 'rgba(255,255,255,0.6)',
-      fg: n === col ? '#F3F2EE' : '#141518',
-      pick: () => this.setState({ col: n })
-    }));
-    const stories = shown.map((w) => ({ num: w.num, title: w.story, place: w.place, date: '[DATE]', img: w.img, excerpt: w.excerpt, read: w.read }));
-    return {
-      filters,
-      prints: shown,
-      stories,
-      isPrints,
-      isStories: !isPrints,
-      count: shown.length,
-      noun: isPrints ? 'works' : 'stories',
-      heading: isPrints ? 'Take the city home.' : 'The captions, unabridged.',
-      blurb: isPrints ? 'Archival prints, signed and numbered. Each one links back to the story of how it was made.' : 'Every post becomes a story the moment it is published — the full caption, the place, the settings, the print.',
-      printsBg: isPrints ? '#141518' : 'transparent',
-      printsFg: isPrints ? '#F3F2EE' : '#141518',
-      storiesBg: isPrints ? 'transparent' : '#141518',
-      storiesFg: isPrints ? '#141518' : '#F3F2EE',
-      walkRef: this.walkRef,
-      walkNext: () => this.walk(1),
-      walkBack: () => this.walk(-1),
-      showPrints: () => this.setState({ mode: 'prints' }),
-      showStories: () => this.setState({ mode: 'stories' })
-    };
-  }
-}
-DC.mount(Component);
+  DC.mount(Collection);
+});
 </script>
 </body>
 </html>

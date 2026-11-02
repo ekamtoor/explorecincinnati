@@ -18,6 +18,8 @@
     return str.replace(RE, function (_, p) { var v = get(scope, p); return v == null ? '' : String(v); });
   }
 
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
   function renderInto(node, scope, parent) {
     if (node.nodeType === 3) {
       var txt = node.nodeValue;
@@ -42,7 +44,9 @@
       }
       return;
     }
-    var el = document.createElement(tag);
+    // SVG children must be created in the SVG namespace or the browser renders nothing.
+    var inSvg = tag === 'svg' || (parent.namespaceURI === SVG_NS);
+    var el = inSvg ? document.createElementNS(SVG_NS, node.tagName) : document.createElement(tag);
     el.__h = {};
     for (var a = 0; a < node.attributes.length; a++) {
       var at = node.attributes[a], n = at.name;
