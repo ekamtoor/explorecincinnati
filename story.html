@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>explore.cincinnati — Story: The night the bridge disappeared</title>
+<meta name="description" content="Photographs, fine-art prints and the stories behind them — Cincinnati, seen slowly. Test site.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F2EE}
+a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
+.glass{background:rgba(255,255,255,0.58);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,0.8);box-shadow:inset 0 1px 0 rgba(255,255,255,0.95),0 12px 40px rgba(20,21,24,0.08)}
+.glass-dark{background:rgba(20,21,24,0.42);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);border:1px solid rgba(255,255,255,0.28);box-shadow:inset 0 1px 0 rgba(255,255,255,0.35),0 12px 40px rgba(20,21,24,0.18);color:#fff}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes kb{from{transform:scale(1.08)}to{transform:scale(1)}}
+@keyframes mist{0%{transform:translateX(-18%)}100%{transform:translateX(18%)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.rise{animation:rise 1s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.12s}.d2{animation-delay:.24s}.d3{animation-delay:.36s}
+.kb{animation:kb 14s cubic-bezier(.2,.6,.2,1) both}
+.mist{animation:mist 16s ease-in-out infinite alternate}
+.live{animation:blink 2.4s ease-in-out infinite}
+.card img{transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.card:hover img{transform:scale(1.045)}
+.lift{transition:transform .6s cubic-bezier(.2,.7,.2,1),box-shadow .6s}
+.lift:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(20,21,24,0.14)}
+.btn{transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.btn:hover{transform:translateY(-2px)}
+@supports (animation-timeline: view()){.reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 35%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<link rel="stylesheet" href="site.css">
+<script src="dc.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<template id="tpl">
+<div style="font-family: 'Instrument Sans', system-ui, sans-serif; color: #141518; background: #F3F2EE; min-height: 100vh; display: flex; flex-direction: column; -webkit-font-smoothing: antialiased">
+
+  <header style="position: sticky; top: 0; z-index: 5; padding: 14px 24px; display: flex; justify-content: center">
+    <div class="glass" style="width: 100%; max-width: 1320px; box-sizing: border-box; border-radius: 999px; padding: 8px 8px 8px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+      <a href="index.html" style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px"><span class="live" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #0E5A6C"></span>explore.cincinnati</a>
+      <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; font-weight: 500">
+        <a href="collection.html" style="padding: 10px 14px; border-radius: 999px">Collection</a>
+        <a href="collection.html" style="padding: 10px 14px; border-radius: 999px; background: rgba(20,21,24,0.06)">Stories</a>
+        <a href="index.html" style="padding: 10px 14px; border-radius: 999px">Map</a>
+        <a href="index.html" style="padding: 10px 14px; border-radius: 999px">About</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 6px">
+        <a href="https://www.instagram.com/explore.cincinnati/" aria-label="Instagram" style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.12)"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle></svg></a>
+        <a href="print.html" class="btn" style="display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; background: #141518; color: #F3F2EE; border-radius: 999px; font-size: 14px; font-weight: 600">Cart · 0</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- STORY HERO -->
+  <section style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 40px 40px 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
+    <nav aria-label="Breadcrumb" class="rise" style="font-size: 13px; color: #5E6168; display: flex; gap: 8px"><a href="collection.html" style="color: #5E6168">Stories</a><span>/</span><a href="collection.html" style="color: #5E6168">Fog &amp; Night</a><span>/</span><span style="color: #141518">No. 02</span></nav>
+    <div class="rise d1" style="position: relative; height: 720px; border-radius: 28px; overflow: hidden; background: #E6E4DE; box-shadow: 0 30px 80px rgba(20,21,24,0.12)">
+      <img class="kb" src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog, reflected in the Ohio River" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%">
+      <div class="mist" aria-hidden="true" style="position: absolute; left: 10%; top: 20%; width: 80%; height: 60%; background: radial-gradient(closest-side, rgba(255,255,255,0.4), rgba(255,255,255,0)); filter: blur(40px); pointer-events: none"></div>
+      <div class="glass-dark" style="position: absolute; left: 28px; right: 28px; bottom: 28px; max-width: 760px; border-radius: 22px; padding: 28px 30px; display: flex; flex-direction: column; gap: 12px">
+        <span style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.85">No. 02 · Roebling Bridge · [DATE] · 5 min read</span>
+        <h1 style="margin: 0; font-size: 56px; font-weight: 500; line-height: 1; letter-spacing: -0.035em">The night the bridge disappeared</h1>
+        <span style="font-size: 15px; opacity: 0.9">Covington landing, 11:40 pm. Fog so thick the far tower never showed up.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BODY -->
+  <section style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 72px 40px 96px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 64px; align-items: flex-start">
+    <!-- Wall label -->
+    <aside class="glass rise d2" style="flex: 0 1 320px; border-radius: 22px; padding: 26px; display: flex; flex-direction: column; gap: 16px">
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 21px; font-weight: 400; color: #0E5A6C">Wall label</p>
+      <dl style="margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 10px 16px; font-size: 13px">
+        <dt style="color: #5E6168">Work</dt><dd style="margin: 0">Roebling, in the fog</dd>
+        <dt style="color: #5E6168">Shot</dt><dd style="margin: 0">[DATE], 11:40 pm</dd>
+        <dt style="color: #5E6168">Where</dt><dd style="margin: 0">Covington landing, KY</dd>
+        <dt style="color: #5E6168">Camera</dt><dd style="margin: 0">[CAMERA] · [LENS]</dd>
+        <dt style="color: #5E6168">Settings</dt><dd style="margin: 0">[f-stop] · [shutter] · ISO [N]</dd>
+        <dt style="color: #5E6168">Gallery</dt><dd style="margin: 0">Fog &amp; Night, Room I</dd>
+      </dl>
+      <a href="print.html" class="lift" style="display: flex; gap: 14px; align-items: center; padding: 12px; border-radius: 16px; background: #FFFFFF; color: #141518">
+        <span style="flex: 0 0 64px; height: 64px; border-radius: 10px; overflow: hidden; background: #E6E4DE; display: block"><img src="img/roebling-fog.webp" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block"></span>
+        <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">Own this print</span><span style="font-size: 12px; color: #5E6168">from $65 · signed &amp; numbered</span></span>
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: auto"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </a>
+      <a href="https://www.instagram.com/explore.cincinnati/" style="display: inline-flex; align-items: center; gap: 8px; color: #0E5A6C; font-size: 14px; font-weight: 600">See the original post
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </a>
+    </aside>
+    <!-- Caption as article -->
+    <article class="rise d3" style="flex: 1 1 520px; min-width: 0; max-width: 720px; font-size: 21px; line-height: 1.6; color: #2A2C31; display: flex; flex-direction: column; gap: 24px">
+      <p style="margin: 0; font-size: 26px; line-height: 1.45; color: #141518; font-weight: 500; letter-spacing: -0.01em">[The full Instagram caption lives here, formatted as proper paragraphs. The first paragraph is set larger as the lede.]</p>
+      <p style="margin: 0">[Second paragraph — the history of the Roebling: opened in 1866, the prototype for Brooklyn, why the fog settles on the river on nights like this one…]</p>
+      <figure style="margin: 12px 0; display: flex; flex-direction: column; gap: 10px">
+        <img src="img/skyline-fog.webp" alt="Downtown Cincinnati skyline in night fog" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px; display: block">
+        <figcaption style="font-size: 13px; color: #5E6168">Same night, from Smale Park — the city floating. Also on view as No. 01.</figcaption>
+      </figure>
+      <p style="margin: 0">[Third paragraph — how the shot was made: the wait, the tripod, the car headlights that almost ruined it, the frame that finally worked.]</p>
+      <p style="margin: 0">[Closing — where to stand if you want to try it yourself, and the best months for river fog.]</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; padding-top: 8px">
+        <a href="collection.html" style="height: 38px; display: inline-flex; align-items: center; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.14); font-size: 13px; font-weight: 500">History</a>
+        <a href="collection.html" style="height: 38px; display: inline-flex; align-items: center; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.14); font-size: 13px; font-weight: 500">How it was shot</a>
+        <a href="collection.html" style="height: 38px; display: inline-flex; align-items: center; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.14); font-size: 13px; font-weight: 500">Fog</a>
+        <a href="index.html" style="height: 38px; display: inline-flex; align-items: center; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.14); font-size: 13px; font-weight: 500">On the map</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- NEXT STORIES -->
+  <section class="reveal" style="background: #FFFFFF; border-top: 1px solid rgba(20,21,24,0.08)">
+    <div style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 80px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px">
+        <h2 style="margin: 0; font-size: 36px; font-weight: 500; letter-spacing: -0.03em">Keep walking</h2>
+        <a href="collection.html" style="font-size: 14px; font-weight: 600; color: #0E5A6C">All stories →</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+        <a href="story.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/tunnel-neon.webp" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168; padding: 0 4px">No. 03 · [Neighborhood]</span><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">A doorway to somewhere else</span></a>
+        <a href="story.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/bellevue-hill.webp" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168; padding: 0 4px">No. 04 · Bellevue Hill</span><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">The concrete lilypads nobody looks up at</span></a>
+        <a href="story.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/sugarcreek-clock.webp" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168; padding: 0 4px">No. 07 · Sugarcreek, OH</span><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">The world's largest cuckoo clock</span></a>
+      </div>
+    </div>
+  </section>
+
+  <footer style="margin-top: auto; border-top: 1px solid rgba(20,21,24,0.1)">
+    <div style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 12px; color: #5E6168">
+      <span>© 2026 explore.cincinnati · All photographs © [PHOTOGRAPHER NAME]</span>
+      <span>Shipping · Returns · Privacy</span>
+    </div>
+  </footer>
+</div>
+</template>
+<script>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+DC.mount(Component);
+</script>
+</body>
+</html>

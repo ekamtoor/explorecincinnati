@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>explore.cincinnati — Studio (private admin)</title>
+<meta name="description" content="Photographs, fine-art prints and the stories behind them — Cincinnati, seen slowly. Test site.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F2EE}
+a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
+.glass{background:rgba(255,255,255,0.62);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,0.85);box-shadow:inset 0 1px 0 rgba(255,255,255,0.95),0 12px 40px rgba(20,21,24,0.07)}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.rise{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}
+.bar{transform-origin:bottom;animation:grow 1.1s cubic-bezier(.2,.7,.2,1) both}
+.bar:nth-child(2){animation-delay:.08s}.bar:nth-child(3){animation-delay:.16s}.bar:nth-child(4){animation-delay:.24s}.bar:nth-child(5){animation-delay:.32s}.bar:nth-child(6){animation-delay:.4s}.bar:nth-child(7){animation-delay:.48s}
+.live{animation:blink 2.4s ease-in-out infinite}
+.row{transition:background .3s}.row:hover{background:rgba(14,90,108,0.05)}
+.btn{transition:transform .3s,background .3s}.btn:hover{transform:translateY(-1px)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<link rel="stylesheet" href="site.css">
+<script src="dc.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<template id="tpl">
+<div style="font-family: 'Instrument Sans', system-ui, sans-serif; color: #141518; background: #F3F2EE; min-height: 100vh; display: flex; flex-wrap: wrap; -webkit-font-smoothing: antialiased">
+
+  <!-- SIDEBAR -->
+  <aside style="flex: 1 1 240px; max-width: 260px; padding: 24px 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px; border-right: 1px solid rgba(20,21,24,0.08)">
+    <a href="index.html" style="font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px"><span class="live" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #0E5A6C"></span>explore.cincinnati <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: #5E6168">Studio</span></a>
+    <nav aria-label="Studio" style="display: flex; flex-direction: column; gap: 2px; font-size: 14px; font-weight: 500">
+      <a href="studio.html" style="padding: 10px 12px; border-radius: 12px; background: #141518; color: #F3F2EE">Overview</a>
+      <a href="studio.html" style="padding: 10px 12px; border-radius: 12px">Sync queue <span style="float: right; font-size: 12px; background: #0E5A6C; color: #fff; padding: 2px 8px; border-radius: 999px">2</span></a>
+      <a href="studio.html" style="padding: 10px 12px; border-radius: 12px">Stories</a>
+      <a href="studio.html" style="padding: 10px 12px; border-radius: 12px">Prints &amp; editions</a>
+      <a href="studio.html" style="padding: 10px 12px; border-radius: 12px">Orders</a>
+      <a href="studio.html" style="padding: 10px 12px; border-radius: 12px">Audience</a>
+      <a href="studio.html" style="padding: 10px 12px; border-radius: 12px">Shot map</a>
+      <a href="studio.html" style="padding: 10px 12px; border-radius: 12px">Newsletter</a>
+    </nav>
+    <div class="glass" style="margin-top: auto; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #5E6168">
+      <span style="display: flex; align-items: center; gap: 8px; color: #141518; font-weight: 600"><span style="width: 8px; height: 8px; border-radius: 50%; background: #2E8B57"></span>Instagram connected</span>
+      <span>@explore.cincinnati · Creator account</span>
+      <span>Last sync {{lastSync}} · token renews in 52 days</span>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main style="flex: 999 1 720px; min-width: 0; padding: 24px 32px 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+
+    <div class="rise" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 21px; color: #0E5A6C">Private · last 30 days · sample data</p>
+        <h1 style="margin: 0; font-size: 40px; font-weight: 500; line-height: 1; letter-spacing: -0.035em">What the feed is actually doing</h1>
+      </div>
+      <div style="display: flex; gap: 8px">
+        <button type="button" onClick="{{syncNow}}" class="glass btn" style="height: 44px; padding: 0 18px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 600; color: #141518; cursor: pointer">{{syncLabel}}</button>
+        <a href="studio.html" class="btn" style="display: inline-flex; align-items: center; height: 44px; padding: 0 18px; border-radius: 999px; background: #141518; color: #F3F2EE; font-size: 14px; font-weight: 600">New print</a>
+      </div>
+    </div>
+
+    <!-- KPIs: Instagram numbers next to the numbers Instagram can't see -->
+    <div class="rise d1" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
+      <div class="glass" style="border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; color: #5E6168">Followers</span><span style="font-size: 30px; font-weight: 500; letter-spacing: -0.03em">48.2k</span><span style="font-size: 12px; color: #2E8B57">+1,140 this month</span></div>
+      <div class="glass" style="border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; color: #5E6168">Reach · 30d</span><span style="font-size: 30px; font-weight: 500; letter-spacing: -0.03em">612k</span><span style="font-size: 12px; color: #5E6168">from Instagram Insights</span></div>
+      <div class="glass" style="border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; color: #5E6168">Story reads · site</span><span style="font-size: 30px; font-weight: 500; letter-spacing: -0.03em">9,870</span><span style="font-size: 12px; color: #5E6168">avg 3 m 40 s on page</span></div>
+      <div class="glass" style="border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; color: #5E6168">Print revenue · 30d</span><span style="font-size: 30px; font-weight: 500; letter-spacing: -0.03em">$6,410</span><span style="font-size: 12px; color: #2E8B57">71 orders · +18%</span></div>
+      <div class="glass" style="border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; color: #5E6168">Revenue per 1k reach</span><span style="font-size: 30px; font-weight: 500; letter-spacing: -0.03em">$10.47</span><span style="font-size: 12px; color: #5E6168">the number Instagram can't show</span></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+      <!-- Funnel -->
+      <div class="glass rise d2" style="grid-column: span 2; border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px">
+          <h2 style="margin: 0; font-size: 18px; font-weight: 600">Post → story → print, per week</h2>
+          <span style="font-size: 12px; color: #5E6168">bars: story reads · dots: orders</span>
+        </div>
+        <div style="display: flex; align-items: flex-end; gap: 14px; height: 180px; padding-top: 8px">
+          <div class="bar" style="flex: 1; height: 42%; border-radius: 8px 8px 4px 4px; background: #0E5A6C; position: relative"><span style="position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #5E6168">5</span></div>
+          <div class="bar" style="flex: 1; height: 58%; border-radius: 8px 8px 4px 4px; background: #0E5A6C; position: relative"><span style="position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #5E6168">9</span></div>
+          <div class="bar" style="flex: 1; height: 50%; border-radius: 8px 8px 4px 4px; background: #0E5A6C; position: relative"><span style="position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #5E6168">7</span></div>
+          <div class="bar" style="flex: 1; height: 88%; border-radius: 8px 8px 4px 4px; background: #0E5A6C; position: relative"><span style="position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #5E6168">22</span></div>
+          <div class="bar" style="flex: 1; height: 66%; border-radius: 8px 8px 4px 4px; background: #0E5A6C; position: relative"><span style="position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #5E6168">12</span></div>
+          <div class="bar" style="flex: 1; height: 74%; border-radius: 8px 8px 4px 4px; background: #0E5A6C; position: relative"><span style="position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #5E6168">16</span></div>
+        </div>
+        <div style="display: flex; gap: 14px; font-size: 11px; color: #5E6168"><span style="flex: 1; text-align: center">Sep 22</span><span style="flex: 1; text-align: center">Sep 29</span><span style="flex: 1; text-align: center">Oct 6</span><span style="flex: 1; text-align: center">Oct 13 · fog week</span><span style="flex: 1; text-align: center">Oct 20</span><span style="flex: 1; text-align: center">Oct 27</span></div>
+        <p style="margin: 0; font-size: 13px; color: #5E6168; border-top: 1px solid rgba(20,21,24,0.1); padding-top: 12px">Fog week drove 22 orders from 4 posts. Posts with a story longer than 600 words convert 2.3× better than short captions.</p>
+      </div>
+
+      <!-- Best posting windows -->
+      <div class="glass rise d3" style="border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600">When your people are awake</h2>
+        <p style="margin: 0; font-size: 13px; color: #5E6168">Reach by posting hour, last 90 days. Site traffic follows about 40 minutes later.</p>
+        <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px">
+          <div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.12)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.2)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.35)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.9)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.55)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.25)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.15)"></div>
+          <div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.1)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.15)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.3)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.75)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.95)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.6)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.3)"></div>
+          <div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.12)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.2)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.25)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.5)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.7)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.4)"></div><div style="height: 28px; border-radius: 6px; background: rgba(14,90,108,0.2)"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #5E6168"><span>6 am</span><span>noon</span><span>6 pm</span><span>midnight</span></div>
+        <p style="margin: 0; font-size: 13px; color: #141518; font-weight: 500">Best: Tue–Thu, 7–9 pm. Fog mornings are the exception — post the moment you're back in the car.</p>
+      </div>
+    </div>
+
+    <!-- Sync queue -->
+    <div class="glass rise d3" style="border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600">Sync queue — new posts waiting to become stories</h2>
+        <span style="font-size: 12px; color: #5E6168">pulled from the Instagram API every 15 min</span>
+      </div>
+      <sc-for list="{{queue}}" as="q" hint-placeholder-count="2">
+        <div class="row" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px; border-radius: 16px; border: 1px solid rgba(20,21,24,0.08); background: #FFFFFF">
+          <img src="{{q.img}}" alt="" style="width: 64px; height: 64px; border-radius: 10px; object-fit: cover; flex: 0 0 64px">
+          <div style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+            <span style="font-size: 15px; font-weight: 600">{{q.title}}</span>
+            <span style="font-size: 13px; color: #5E6168; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden">{{q.caption}}</span>
+            <span style="font-size: 12px; color: #5E6168">{{q.meta}}</span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px">
+            <span style="padding: 6px 10px; border-radius: 999px; background: {{q.locBg}}; color: {{q.locFg}}">{{q.loc}}</span>
+            <span style="padding: 6px 10px; border-radius: 999px; background: {{q.printBg}}; color: {{q.printFg}}">{{q.print}}</span>
+          </div>
+          <button type="button" onClick="{{q.publish}}" class="btn" style="height: 40px; padding: 0 16px; border-radius: 999px; border: 0; background: {{q.btnBg}}; color: {{q.btnFg}}; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">{{q.btn}}</button>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- Per-post table -->
+    <div class="glass rise d4" style="border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600">Every post, followed all the way to the sale</h2>
+        <span style="font-size: 12px; color: #5E6168">left of the line: Instagram · right: your site</span>
+      </div>
+      <div style="overflow-x: auto">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px; min-width: 760px">
+          <thead>
+            <tr style="color: #5E6168; text-align: left">
+              <th style="font-weight: 500; padding: 8px 10px">Post</th><th style="font-weight: 500; padding: 8px 10px">Reach</th><th style="font-weight: 500; padding: 8px 10px">Saves</th><th style="font-weight: 500; padding: 8px 10px; border-right: 1px solid rgba(20,21,24,0.14)">Profile taps</th><th style="font-weight: 500; padding: 8px 10px">Story reads</th><th style="font-weight: 500; padding: 8px 10px">Read time</th><th style="font-weight: 500; padding: 8px 10px">Print views</th><th style="font-weight: 500; padding: 8px 10px">Orders</th><th style="font-weight: 500; padding: 8px 10px; text-align: right">Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row" style="border-top: 1px solid rgba(20,21,24,0.08)"><td style="padding: 10px; font-weight: 600">No. 02 · Roebling, in the fog</td><td style="padding: 10px">141k</td><td style="padding: 10px">3,920</td><td style="padding: 10px; border-right: 1px solid rgba(20,21,24,0.14)">2,110</td><td style="padding: 10px">2,640</td><td style="padding: 10px">4 m 12 s</td><td style="padding: 10px">1,180</td><td style="padding: 10px">24</td><td style="padding: 10px; text-align: right; font-weight: 600">$2,310</td></tr>
+            <tr class="row" style="border-top: 1px solid rgba(20,21,24,0.08)"><td style="padding: 10px; font-weight: 600">No. 01 · Fog over the Ohio</td><td style="padding: 10px">96k</td><td style="padding: 10px">2,480</td><td style="padding: 10px; border-right: 1px solid rgba(20,21,24,0.14)">1,330</td><td style="padding: 10px">1,710</td><td style="padding: 10px">3 m 05 s</td><td style="padding: 10px">720</td><td style="padding: 10px">15</td><td style="padding: 10px; text-align: right; font-weight: 600">$1,405</td></tr>
+            <tr class="row" style="border-top: 1px solid rgba(20,21,24,0.08)"><td style="padding: 10px; font-weight: 600">No. 04 · The concrete lilypads</td><td style="padding: 10px">188k</td><td style="padding: 10px">6,100</td><td style="padding: 10px; border-right: 1px solid rgba(20,21,24,0.14)">3,400</td><td style="padding: 10px">3,120</td><td style="padding: 10px">5 m 40 s</td><td style="padding: 10px">640</td><td style="padding: 10px">9</td><td style="padding: 10px; text-align: right; font-weight: 600">$715</td></tr>
+            <tr class="row" style="border-top: 1px solid rgba(20,21,24,0.08)"><td style="padding: 10px; font-weight: 600">No. 03 · A doorway to somewhere else</td><td style="padding: 10px">62k</td><td style="padding: 10px">1,210</td><td style="padding: 10px; border-right: 1px solid rgba(20,21,24,0.14)">540</td><td style="padding: 10px">980</td><td style="padding: 10px">2 m 20 s</td><td style="padding: 10px">410</td><td style="padding: 10px">11</td><td style="padding: 10px; text-align: right; font-weight: 600">$880</td></tr>
+            <tr class="row" style="border-top: 1px solid rgba(20,21,24,0.08)"><td style="padding: 10px; font-weight: 600">No. 07 · The Sugarcreek clock</td><td style="padding: 10px">44k</td><td style="padding: 10px">690</td><td style="padding: 10px; border-right: 1px solid rgba(20,21,24,0.14)">310</td><td style="padding: 10px">520</td><td style="padding: 10px">1 m 50 s</td><td style="padding: 10px">150</td><td style="padding: 10px">3</td><td style="padding: 10px; text-align: right; font-weight: 600">$135</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin: 0; font-size: 13px; color: #5E6168; border-top: 1px solid rgba(20,21,24,0.1); padding-top: 12px">Bellevue Hill had the biggest reach but the fewest orders per read — a landscape crop sells worse than the square. Worth offering it as a panoramic.</p>
+    </div>
+
+    <!-- Bottom row -->
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+      <div class="glass" style="border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600">Editions</h2>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px">
+          <div style="display: flex; justify-content: space-between"><span>No. 02 · Roebling</span><span style="color: #5E6168">31 / 100 sold</span></div><div style="height: 6px; border-radius: 999px; background: rgba(20,21,24,0.08)"><div style="width: 31%; height: 100%; border-radius: 999px; background: #0E5A6C"></div></div>
+          <div style="display: flex; justify-content: space-between"><span>No. 03 · Doorway</span><span style="color: #5E6168">44 / 50 sold</span></div><div style="height: 6px; border-radius: 999px; background: rgba(20,21,24,0.08)"><div style="width: 88%; height: 100%; border-radius: 999px; background: #B8742A"></div></div>
+          <div style="display: flex; justify-content: space-between"><span>No. 01 · Fog over the Ohio</span><span style="color: #5E6168">19 / 100 sold</span></div><div style="height: 6px; border-radius: 999px; background: rgba(20,21,24,0.08)"><div style="width: 19%; height: 100%; border-radius: 999px; background: #0E5A6C"></div></div>
+        </div>
+        <span style="font-size: 12px; color: #B8742A; font-weight: 600">Doorway is 6 from selling out — announce it.</span>
+      </div>
+      <div class="glass" style="border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600">Where buyers live</h2>
+        <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px">
+          <div style="display: flex; justify-content: space-between"><span>Cincinnati metro</span><span style="color: #5E6168">46%</span></div>
+          <div style="display: flex; justify-content: space-between"><span>Rest of Ohio / KY / IN</span><span style="color: #5E6168">22%</span></div>
+          <div style="display: flex; justify-content: space-between"><span>Chicago, NYC, DC (expats)</span><span style="color: #5E6168">19%</span></div>
+          <div style="display: flex; justify-content: space-between"><span>Everywhere else</span><span style="color: #5E6168">13%</span></div>
+        </div>
+        <span style="font-size: 12px; color: #5E6168">Expats buy bigger sizes. Try a "homesick" email in December.</span>
+      </div>
+      <div class="glass" style="border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600">Fog alerts list</h2>
+        <span style="font-size: 30px; font-weight: 500; letter-spacing: -0.03em">3,214</span>
+        <span style="font-size: 13px; color: #2E8B57">+412 this month · 61% open rate</span>
+        <span style="font-size: 12px; color: #5E6168">Subscribers buy at 4.1% vs 0.6% for Instagram taps. Keep moving people to email.</span>
+      </div>
+    </div>
+  </main>
+</div>
+</template>
+<script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { published: {}, synced: false };
+  }
+  renderVals() {
+    const items = [
+      { id: 'a', title: 'Golden hour, flipped — Spring Grove', caption: 'Last light in October. I turned the camera upside down because the water was the sharper version of the…', meta: 'Posted 2 h ago · 1,840 likes so far · caption 712 words', img: 'img/spring-grove-autumn.webp', loc: 'Location confirmed', locOk: true, print: 'No print attached', printOk: false },
+      { id: 'b', title: 'The Sugarcreek clock', caption: 'Two hours north, Amish country, and a band that plays every half hour whether you asked or not…', meta: 'Posted yesterday · 3,210 likes · caption 540 words', img: 'img/sugarcreek-clock.webp', loc: 'Location: Sugarcreek, OH', locOk: true, print: 'Print No. 07 linked', printOk: true }
+    ];
+    const queue = items.map((it) => {
+      const done = !!this.state.published[it.id];
+      return {
+        ...it,
+        locBg: it.locOk ? 'rgba(46,139,87,0.12)' : 'rgba(184,116,42,0.14)', locFg: it.locOk ? '#1F6B42' : '#8A5418',
+        printBg: it.printOk ? 'rgba(46,139,87,0.12)' : 'rgba(184,116,42,0.14)', printFg: it.printOk ? '#1F6B42' : '#8A5418',
+        btn: done ? 'Live on site ✓' : 'Publish story',
+        btnBg: done ? '#0E5A6C' : '#141518', btnFg: '#F3F2EE',
+        publish: () => this.setState({ published: { ...this.state.published, [it.id]: true } })
+      };
+    });
+    return {
+      queue,
+      lastSync: this.state.synced ? 'just now' : '4 min ago',
+      syncLabel: this.state.synced ? 'Synced ✓' : 'Sync Instagram now',
+      syncNow: () => this.setState({ synced: true })
+    };
+  }
+}
+DC.mount(Component);
+</script>
+</body>
+</html>
