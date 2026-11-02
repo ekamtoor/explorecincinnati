@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F0E8">
+<title>The living map — explore.cincinnati</title>
+<meta name="description" content="Every place explore.cincinnati has photographed, pinned on a map of Cincinnati that grows with every post.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="theme.css">
+<style>
+  .mapview { display: grid; grid-template-columns: minmax(340px, 420px) minmax(0, 1fr); height: calc(100svh - var(--header-h)); border-bottom: 1px solid var(--rule); }
+  .map-panel { overflow-y: auto; overscroll-behavior: contain; border-right: 1px solid var(--rule); padding: clamp(28px, 3vw, 44px) clamp(20px, 2.4vw, 36px) 40px; display: flex; flex-direction: column; gap: 28px; scrollbar-width: thin; }
+  .map-panel .h1 { font-size: clamp(2.8rem, 4.6vw, 4.4rem); }
+  .map-stage { position: relative; min-height: 0; }
+  #living-map { position: absolute; inset: 0; }
+
+  .kpis { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .kpi { padding: 14px 0; display: flex; flex-direction: column; }
+  .kpi + .kpi { padding-left: 18px; border-left: 1px solid var(--rule); }
+  .kpi-n { font-family: var(--serif); font-size: 2.6rem; line-height: 1; letter-spacing: -0.02em; }
+  .kpi-n small { font-size: .45em; color: var(--muted); }
+
+  /* Timeline */
+  .timeline { display: flex; flex-direction: column; gap: 12px; }
+  .tl-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .tl-date { font-family: var(--serif); font-size: 1.35rem; }
+  .tl-track { position: relative; height: 28px; display: flex; align-items: center; }
+  .tl-track::before, .tl-fill { content: ""; position: absolute; left: 0; height: 2px; border-radius: 2px; pointer-events: none; }
+  .tl-track::before { right: 0; background: var(--rule); }
+  .tl-fill { background: var(--ink); width: 100%; }
+  .tl-range { position: relative; width: 100%; margin: 0; height: 28px; background: transparent; -webkit-appearance: none; appearance: none; cursor: pointer; }
+  .tl-range::-webkit-slider-runnable-track { height: 28px; background: transparent; }
+  .tl-range::-moz-range-track { height: 28px; background: transparent; }
+  .tl-range::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; margin-top: 5px; border-radius: 50%; background: var(--amber); border: 3px solid var(--paper); box-shadow: 0 0 0 1px var(--ink); }
+  .tl-range::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--amber); border: 3px solid var(--paper); box-shadow: 0 0 0 1px var(--ink); }
+  .tl-controls { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .tl-play { height: 40px; padding: 0 16px; font-size: .85rem; }
+  .tl-play[aria-pressed="true"] .ic-play, .tl-play[aria-pressed="false"] .ic-pause { display: none; }
+
+  .room-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .toggle { display: inline-flex; align-items: center; gap: 10px; font-size: .88rem; color: var(--ink-2); cursor: pointer; width: fit-content; }
+  .toggle input { appearance: none; -webkit-appearance: none; width: 34px; height: 20px; margin: 0; border-radius: 999px; background: var(--rule-strong); position: relative; cursor: pointer; transition: background .25s; }
+  .toggle input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--paper); transition: transform .25s var(--ease); }
+  .toggle input:checked { background: var(--ink); }
+  .toggle input:checked::after { transform: translateX(14px); }
+
+  /* Post list */
+  .list-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .post-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+  .post-row { width: 100%; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: center; padding: 14px 8px 14px 0; border: 0; border-bottom: 1px solid var(--rule); background: transparent; text-align: left; cursor: pointer; transition: background .25s, padding .3s var(--ease); }
+  .post-row:hover, .post-row.is-active { background: var(--paper-2); padding-left: 8px; }
+  .post-row img { width: 64px; height: 80px; object-fit: cover; border-radius: 2px; }
+  .post-row-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .post-row-title { font-family: var(--serif); font-size: 1.3rem; line-height: 1.1; }
+  .post-row.is-active .post-row-title { color: var(--amber-ink); }
+  .tag { align-self: flex-start; margin-top: 4px; padding: 2px 8px; border: 1px solid var(--rule); border-radius: 999px; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+  /* Selected post card, over the map */
+  .map-card { position: absolute; z-index: 600; left: 24px; bottom: 24px; width: min(380px, calc(100% - 48px)); max-height: calc(100% - 48px); overflow-y: auto; background: var(--paper); border-radius: 4px; box-shadow: 0 30px 70px -20px rgba(22,23,25,.45), 0 0 0 1px var(--rule); animation: rise .45s var(--ease) both; }
+  .map-card[hidden] { display: none; }
+  .map-card .plate-frame { border-radius: 4px 4px 0 0; }
+  .card-body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 8px; }
+  .card-title { margin: 0; font-family: var(--serif); font-weight: 400; font-size: 2rem; line-height: 1; letter-spacing: -0.015em; }
+  .card-place { margin: 0; }
+  .card-body > .meta:first-child { margin: 0; }
+  .card-excerpt { margin: 6px 0 0; font-size: .92rem; color: var(--ink-2); line-height: 1.55; }
+  .card-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .card-actions .btn { height: 44px; padding: 0 1.1rem; font-size: .88rem; }
+  .card-links { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 8px; }
+  .card-links .link { font-size: .85rem; }
+  .card-close { position: absolute; top: 12px; right: 12px; z-index: 2; width: 36px; height: 36px; border-radius: 50%; border: 0; background: rgba(243,240,232,.92); font-size: 22px; line-height: 1; cursor: pointer; }
+  .map-hint { position: absolute; z-index: 500; top: 20px; left: 50%; transform: translateX(-50%); pointer-events: none; }
+
+  /* Below the map */
+  .grow-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); counter-reset: s; }
+  .grow-steps li { padding: 24px 28px 0 0; display: flex; flex-direction: column; gap: 8px; counter-increment: s; }
+  .grow-steps li + li { padding-left: 28px; border-left: 1px solid var(--rule); }
+  .grow-steps li::before { content: "0" counter(s); font-family: var(--serif); font-style: italic; font-size: 1.4rem; color: var(--amber-ink); }
+
+  .hoods-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 28px; }
+  .hood-progress { width: min(100%, 420px); display: flex; flex-direction: column; gap: 10px; }
+  .hood-bar-track { height: 3px; background: var(--rule); border-radius: 3px; overflow: hidden; }
+  .hood-bar { height: 100%; width: 0; background: var(--amber); transition: width .8s var(--ease); }
+  .hood-count { font-family: var(--serif); font-size: clamp(2.6rem, 5vw, 4rem); line-height: 1; }
+  .hood-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); border-top: 1px solid var(--rule); }
+  .hood { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 11px 12px 11px 0; border-bottom: 1px solid var(--rule); font-size: .92rem; color: var(--muted); }
+  .hood.is-explored { color: var(--ink); font-weight: 500; }
+  .hood.is-explored span:first-child::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 10px; border-radius: 50%; background: var(--amber); vertical-align: 1px; }
+  .hood-n { font-size: .75rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  @media (max-width: 900px) {
+    .mapview { display: flex; flex-direction: column; height: auto; }
+    .map-stage { order: -1; height: 66svh; min-height: 380px; }
+    .map-panel { overflow: visible; border-right: 0; }
+    .map-card { left: 12px; right: 12px; bottom: 12px; width: auto; max-height: calc(100% - 24px); }
+    .map-card .plate-frame { aspect-ratio: 16 / 7; }
+    .card-title { font-size: 1.6rem; }
+    .grow-steps { grid-template-columns: 1fr; }
+    .grow-steps li, .grow-steps li + li { padding: 20px 0; border-left: 0; border-bottom: 1px solid var(--rule); }
+  }
+</style>
+<script src="js/site.js" defer></script>
+<script src="vendor/leaflet/leaflet.js" defer></script>
+<script src="js/map.js" defer></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="index.html" aria-label="explore.cincinnati, home"><span class="brand-dot" aria-hidden="true"></span>explore.cincinnati</a>
+    <nav id="primary-nav" class="nav" aria-label="Primary">
+      <a href="collection.html"><span class="nav-num">01</span>Collection</a>
+      <a href="collection.html#stories"><span class="nav-num">02</span>Stories</a>
+      <a href="map.html" aria-current="page"><span class="nav-num">03</span>Map</a>
+      <a href="index.html#about"><span class="nav-num">04</span>About</a>
+    </nav>
+    <div class="header-actions">
+      <a class="cart" href="print.html">Cart <span class="cart-count">0</span></a>
+      <button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path class="m1" d="M4 8.5h16"/><path class="m2" d="M4 15.5h16"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="mapview">
+    <aside class="map-panel" aria-label="Map controls and posts">
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <p class="eyebrow">The living map</p>
+        <h1 class="h1">Every place, <em>pinned.</em></h1>
+        <p class="lede" style="font-size:1rem">Each photograph from @explore.cincinnati lands here the day it’s posted — a new pin, a longer route, one more neighborhood checked off.</p>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi"><span class="kpi-n" id="stat-posts">–</span><span class="meta">posts on the map</span></div>
+        <div class="kpi"><span class="kpi-n"><span id="stat-hoods">–</span><small> / <span id="stat-hoods-total">–</span></small></span><span class="meta">neighborhoods explored</span></div>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-head"><span class="tl-date" id="tl-date">…</span><span class="meta" id="tl-count"></span></div>
+        <div class="tl-track"><span class="tl-fill" id="tl-fill"></span><input class="tl-range" id="tl-range" type="range" min="0" max="0" step="1" value="0" aria-label="Timeline: show the map as it was after each post"></div>
+        <div class="tl-controls">
+          <span class="meta">Drag back in time</span>
+          <button type="button" class="btn btn--ghost tl-play" id="tl-play" aria-pressed="false">
+            <svg class="ic-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5v14l12-7z"/></svg>
+            <svg class="ic-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+            <span class="tl-play-label">Watch it grow</span>
+          </button>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="room-chips" id="map-rooms" role="group" aria-label="Filter by room"></div>
+        <label class="toggle"><input type="checkbox" id="map-route" checked> Show the route walked</label>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="list-head"><span class="eyebrow eyebrow--plain">Newest first</span></div>
+        <ul class="post-list" id="map-list" aria-live="polite"></ul>
+      </div>
+    </aside>
+
+    <div class="map-stage">
+      <div id="living-map" role="region" aria-label="Interactive map of Cincinnati"></div>
+      <article class="map-card" id="map-card" hidden aria-live="polite"></article>
+    </div>
+  </div>
+
+  <!-- How it grows -->
+  <section class="section wrap" aria-labelledby="grow-h">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">How the map grows</p>
+        <h2 class="h2" id="grow-h">One post, <em>one pin.</em></h2>
+      </div>
+      <p class="lede">The map isn’t finished — it can’t be. It fills in at the pace of the feed.</p>
+    </div>
+    <ol class="grow-steps">
+      <li><span class="h3">A photograph goes up</span><span class="meta" style="font-size:.92rem">A new post on @explore.cincinnati — fog on the river, a stairway in Mt. Adams, a mural in OTR.</span></li>
+      <li><span class="h3">It becomes a story</span><span class="meta" style="font-size:.92rem">The full caption is published here with the exact spot it was taken, and the print if there is one.</span></li>
+      <li><span class="h3">The map moves</span><span class="meta" style="font-size:.92rem">A pin drops, the route extends, the timeline gains a day, and a neighborhood gets checked off.</span></li>
+    </ol>
+  </section>
+
+  <!-- Neighborhood checklist -->
+  <section class="section rule-top wrap" aria-labelledby="hoods-h" style="padding-top:clamp(56px,8vw,112px)">
+    <div class="hoods-head">
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <p class="eyebrow">The checklist</p>
+        <h2 class="h2" id="hoods-h">Every neighborhood, <em>eventually.</em></h2>
+      </div>
+      <div class="hood-progress">
+        <span class="hood-count" id="hood-count">–</span>
+        <div class="hood-bar-track"><div class="hood-bar" id="hood-bar"></div></div>
+        <span class="meta">Cincinnati neighborhoods photographed so far</span>
+      </div>
+    </div>
+    <ul class="hood-grid" id="hood-grid"></ul>
+    <p class="meta" id="hood-beyond" style="margin-top:18px"></p>
+    <div style="margin-top:40px;display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px">
+      <a class="btn" href="https://www.instagram.com/explore.cincinnati/" target="_blank" rel="noopener">Suggest the next spot</a>
+      <span class="meta">Know a corner of the city that should be on here? Send it over.</span>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col footer-about">
+        <span class="brand"><span class="brand-dot" aria-hidden="true"></span>explore.cincinnati</span>
+        <p class="meta" style="max-width:34ch;margin:8px 0 0;font-size:.9rem">Photographs and prints from the Queen City by [PHOTOGRAPHER NAME]. Printed locally, shipped everywhere.</p>
+      </div>
+      <nav class="footer-col" aria-label="Collection"><span class="eyebrow eyebrow--plain">Collection</span><a href="collection.html">All prints</a><a href="collection.html">Galleries</a><a href="print.html">Framing</a><a href="index.html#about">Gift cards</a></nav>
+      <nav class="footer-col" aria-label="Explore"><span class="eyebrow eyebrow--plain">Explore</span><a href="collection.html#stories">Stories</a><a href="map.html">The map</a><a href="index.html#about">About</a><a href="index.html#about">Licensing</a></nav>
+      <nav class="footer-col" aria-label="Follow"><span class="eyebrow eyebrow--plain">Follow</span><a href="https://www.instagram.com/explore.cincinnati/" target="_blank" rel="noopener">Instagram</a><a href="index.html#about">TikTok</a><a href="index.html#about">YouTube</a></nav>
+    </div>
+    <p class="footer-mark" aria-hidden="true">explore<em>.</em>cincinnati</p>
+    <div class="footer-base"><span>© 2026 explore.cincinnati · All photographs © [PHOTOGRAPHER NAME]</span><span>Shipping · Returns · Privacy</span></div>
+  </div>
+</footer>
+</body>
+</html>
