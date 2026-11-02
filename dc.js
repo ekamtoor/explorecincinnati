@@ -18,6 +18,8 @@
     return str.replace(RE, function (_, p) { var v = get(scope, p); return v == null ? '' : String(v); });
   }
 
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
   function renderInto(node, scope, parent) {
     if (node.nodeType === 3) {
       var txt = node.nodeValue;
@@ -42,7 +44,9 @@
       }
       return;
     }
-    var el = document.createElement(tag);
+    // SVG children must be created in the SVG namespace or the browser renders nothing.
+    var inSvg = tag === 'svg' || (parent.namespaceURI === SVG_NS);
+    var el = inSvg ? document.createElementNS(SVG_NS, node.tagName) : document.createElement(tag);
     el.__h = {};
     for (var a = 0; a < node.attributes.length; a++) {
       var at = node.attributes[a], n = at.name;
@@ -109,4 +113,18 @@
     if (inst.componentDidMount) inst.componentDidMount();
   };
   window.DC = DC;
+
+  // Mobile menu: state lives on <html> (outside #app) so template re-renders don't reset it.
+  var root = document.documentElement;
+  function setMenu(open) {
+    root.classList.toggle('nav-open', open);
+    var b = document.querySelector('.menu-toggle');
+    if (b) b.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target : e.target.parentElement;
+    if (t.closest('.menu-toggle')) { setMenu(!root.classList.contains('nav-open')); return; }
+    if (root.classList.contains('nav-open') && (t.closest('nav[aria-label="Primary"] a') || !t.closest('header'))) setMenu(false);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
 })();

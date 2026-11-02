@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F2EE">
 <title>explore.cincinnati — Roebling, in the fog (print)</title>
 <meta name="description" content="Photographs, fine-art prints and the stories behind them — Cincinnati, seen slowly. Test site.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,7 +41,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
   <header style="position: sticky; top: 0; z-index: 5; padding: 14px 24px; display: flex; justify-content: center">
     <div class="glass" style="width: 100%; max-width: 1320px; box-sizing: border-box; border-radius: 999px; padding: 8px 8px 8px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
       <a href="index.html" style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px"><span class="live" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #0E5A6C"></span>explore.cincinnati</a>
-      <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; font-weight: 500">
+      <nav id="primary-nav" aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; font-weight: 500">
         <a href="collection.html" style="padding: 10px 14px; border-radius: 999px; background: rgba(20,21,24,0.06)">Collection</a>
         <a href="collection.html" style="padding: 10px 14px; border-radius: 999px">Stories</a>
         <a href="index.html" style="padding: 10px 14px; border-radius: 999px">Map</a>
@@ -49,6 +50,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
       <div style="display: flex; align-items: center; gap: 6px">
         <a href="https://www.instagram.com/explore.cincinnati/" aria-label="Instagram" style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.12)"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle></svg></a>
         <a href="print.html" class="cta" style="display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; background: #141518; color: #F3F2EE; border-radius: 999px; font-size: 14px; font-weight: 600">Cart · {{cartCount}}</a>
+        <button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path class="m1" d="M4 8h16"></path><path class="m2" d="M4 16h16"></path></svg></button>
       </div>
     </div>
   </header>
@@ -65,7 +67,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
           <div aria-hidden="true" style="position: absolute; left: 50%; bottom: 80px; width: 180px; height: 10px; margin-left: -90px; background: rgba(20,21,24,0.12); filter: blur(10px)"></div>
         </sc-if>
         <div class="frame" style="position: relative; width: 100%; max-width: {{frameMax}}; padding: {{matPad}}; background: {{matColor}}; border: {{frameBorder}}; box-shadow: 0 34px 70px rgba(20,21,24,0.26)">
-          <img src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog, reflected in the river" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block">
+          <img fetchpriority="high" src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog, reflected in the river" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block">
         </div>
         <!-- view toggle -->
         <div role="group" aria-label="Preview" class="glass" style="position: absolute; left: 20px; top: 20px; display: inline-flex; padding: 5px; border-radius: 999px; gap: 3px">
@@ -161,9 +163,9 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
   <section class="reveal" style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 72px 40px 88px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px">
     <h2 style="margin: 0; font-size: 34px; font-weight: 500; letter-spacing: -0.03em">Also in Fog &amp; Night</h2>
     <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
-      <a href="collection.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/skyline-fog.webp" alt="Fog over the Ohio" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 18px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">Fog over the Ohio</span><span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168; padding: 0 4px">No. 01 · from $65</span></a>
-      <a href="collection.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/tunnel-neon.webp" alt="A doorway to somewhere else" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 18px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">A doorway to somewhere else</span><span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168; padding: 0 4px">No. 03 · from $55</span></a>
-      <a href="collection.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/bellevue-hill.webp" alt="The concrete lilypads" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 18px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">The concrete lilypads</span><span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168; padding: 0 4px">No. 04 · from $55</span></a>
+      <a href="collection.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img loading="lazy" decoding="async" src="img/skyline-fog.webp" alt="Fog over the Ohio" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 18px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">Fog over the Ohio</span><span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168; padding: 0 4px">No. 01 · from $65</span></a>
+      <a href="collection.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img loading="lazy" decoding="async" src="img/tunnel-neon.webp" alt="A doorway to somewhere else" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 18px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">A doorway to somewhere else</span><span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168; padding: 0 4px">No. 03 · from $55</span></a>
+      <a href="collection.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img loading="lazy" decoding="async" src="img/bellevue-hill.webp" alt="The concrete lilypads" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 18px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">The concrete lilypads</span><span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: #5E6168; padding: 0 4px">No. 04 · from $55</span></a>
     </div>
   </section>
 

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F2EE">
 <title>explore.cincinnati — Home</title>
 <meta name="description" content="Photographs, fine-art prints and the stories behind them — Cincinnati, seen slowly. Test site.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,7 +49,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
   <header style="position: sticky; top: 0; z-index: 5; padding: 14px 24px; display: flex; justify-content: center">
     <div class="glass rise" style="width: 100%; max-width: 1320px; box-sizing: border-box; border-radius: 999px; padding: 8px 8px 8px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
       <a href="index.html" style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px"><span class="live" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #0E5A6C"></span>explore.cincinnati</a>
-      <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; font-weight: 500">
+      <nav id="primary-nav" aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; font-weight: 500">
         <a href="collection.html" style="padding: 10px 14px; border-radius: 999px">Collection</a>
         <a href="collection.html" style="padding: 10px 14px; border-radius: 999px">Stories</a>
         <a href="#map" style="padding: 10px 14px; border-radius: 999px">Map</a>
@@ -57,6 +58,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
       <div style="display: flex; align-items: center; gap: 6px">
         <a href="https://www.instagram.com/explore.cincinnati/" aria-label="Instagram" style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.12)"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle></svg></a>
         <a href="print.html" class="btn" style="display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; background: #141518; color: #F3F2EE; border-radius: 999px; font-size: 14px; font-weight: 600">Cart · 0</a>
+        <button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path class="m1" d="M4 8h16"></path><path class="m2" d="M4 16h16"></path></svg></button>
       </div>
     </div>
   </header>
@@ -71,7 +73,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
       <p class="rise d2" style="margin: 0; max-width: 380px; font-size: 17px; line-height: 1.5; color: #5E6168">Photographs of the Queen City, hung here like a gallery: every piece with its label and its story, and most of them available as prints.</p>
     </div>
     <div class="rise d3" style="position: relative; height: 680px; border-radius: 28px; overflow: hidden; background: #E6E4DE; box-shadow: 0 30px 80px rgba(20,21,24,0.12)">
-      <img class="kb" src="img/skyline-fog.webp" alt="Downtown Cincinnati skyline glowing through night fog, reflected in the Ohio River" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%">
+      <img fetchpriority="high" class="kb" src="img/skyline-fog.webp" alt="Downtown Cincinnati skyline glowing through night fog, reflected in the Ohio River" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%">
       <div class="mist" aria-hidden="true" style="position: absolute; left: 10%; top: 20%; width: 80%; height: 60%; background: radial-gradient(closest-side, rgba(255,255,255,0.5), rgba(255,255,255,0)); filter: blur(40px); pointer-events: none"></div>
       <div class="glass-dark" style="position: absolute; left: 28px; bottom: 28px; max-width: 420px; border-radius: 20px; padding: 20px 22px; display: flex; flex-direction: column; gap: 8px">
         <span style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.8">No. 01 · Now on view</span>
@@ -109,15 +111,15 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
     </div>
     <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
       <a href="story.html" class="card" style="position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 20px; overflow: hidden; background: #E6E4DE">
-        <img src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog" style="width: 100%; height: 100%; object-fit: cover; display: block">
+        <img loading="lazy" decoding="async" src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog" style="width: 100%; height: 100%; object-fit: cover; display: block">
         <span class="placard glass" style="position: absolute; left: 14px; right: 14px; bottom: 14px; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; color: #141518"><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168">No. 02 · Roebling Bridge</span><span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">The night the bridge disappeared</span><span style="font-size: 12px; color: #5E6168">Story · Print available</span></span>
       </a>
       <a href="story.html" class="card" style="position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 20px; overflow: hidden; background: #E6E4DE">
-        <img src="img/tunnel-neon.webp" alt="A pedestrian tunnel glowing cold blue under a red-haloed streetlight in fog" style="width: 100%; height: 100%; object-fit: cover; display: block">
+        <img loading="lazy" decoding="async" src="img/tunnel-neon.webp" alt="A pedestrian tunnel glowing cold blue under a red-haloed streetlight in fog" style="width: 100%; height: 100%; object-fit: cover; display: block">
         <span class="placard glass" style="position: absolute; left: 14px; right: 14px; bottom: 14px; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; color: #141518"><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168">No. 03 · [Neighborhood]</span><span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">A doorway to somewhere else</span><span style="font-size: 12px; color: #5E6168">Story · Limited print</span></span>
       </a>
       <a href="story.html" class="card" style="position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 20px; overflow: hidden; background: #E6E4DE">
-        <img src="img/bellevue-hill.webp" alt="Concrete canopy at Bellevue Hill Park framing the downtown skyline in autumn" style="width: 100%; height: 100%; object-fit: cover; display: block">
+        <img loading="lazy" decoding="async" src="img/bellevue-hill.webp" alt="Concrete canopy at Bellevue Hill Park framing the downtown skyline in autumn" style="width: 100%; height: 100%; object-fit: cover; display: block">
         <span class="placard glass" style="position: absolute; left: 14px; right: 14px; bottom: 14px; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; color: #141518"><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168">No. 04 · Bellevue Hill</span><span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">The concrete lilypads of Clifton</span><span style="font-size: 12px; color: #5E6168">Story · Print available</span></span>
       </a>
     </div>
@@ -128,7 +130,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
     <div style="display: flex; flex-wrap: wrap; border-radius: 28px; overflow: hidden; background: #FFFFFF; box-shadow: 0 20px 60px rgba(20,21,24,0.08)">
       <div style="flex: 1 1 520px; min-width: 0; min-height: 560px; background: #ECEAE4; display: flex; align-items: center; justify-content: center; padding: 56px; box-sizing: border-box">
         <div class="lift" style="width: 100%; max-width: 420px; padding: 20px; background: #FFFFFF; border: 12px solid #141518; box-shadow: 0 30px 60px rgba(20,21,24,0.22)">
-          <img src="img/roebling-fog.webp" alt="Framed print preview of the Roebling Bridge in fog" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block">
+          <img loading="lazy" decoding="async" src="img/roebling-fog.webp" alt="Framed print preview of the Roebling Bridge in fog" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block">
         </div>
       </div>
       <div style="flex: 1 1 420px; min-width: 0; padding: 56px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 20px">
@@ -162,19 +164,19 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
     </div>
     <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px">
       <a href="collection.html" class="card" style="position: relative; display: block; aspect-ratio: 3 / 4; border-radius: 20px; overflow: hidden; background: #E6E4DE">
-        <img src="img/skyline-fog.webp" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block">
+        <img loading="lazy" decoding="async" src="img/skyline-fog.webp" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block">
         <span class="glass" style="position: absolute; left: 12px; right: 12px; bottom: 12px; border-radius: 14px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: baseline; color: #141518"><span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">Fog &amp; Night</span><span style="font-size: 12px; color: #5E6168">Room I</span></span>
       </a>
       <a href="collection.html" class="card" style="position: relative; display: block; aspect-ratio: 3 / 4; border-radius: 20px; overflow: hidden; background: #E6E4DE">
-        <img src="img/spring-grove-autumn.webp" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block">
+        <img loading="lazy" decoding="async" src="img/spring-grove-autumn.webp" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block">
         <span class="glass" style="position: absolute; left: 12px; right: 12px; bottom: 12px; border-radius: 14px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: baseline; color: #141518"><span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">Autumn</span><span style="font-size: 12px; color: #5E6168">Room II</span></span>
       </a>
       <a href="collection.html" class="card" style="position: relative; display: block; aspect-ratio: 3 / 4; border-radius: 20px; overflow: hidden; background: #E6E4DE">
-        <img src="img/spring-grove-reflect.webp" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block">
+        <img loading="lazy" decoding="async" src="img/spring-grove-reflect.webp" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block">
         <span class="glass" style="position: absolute; left: 12px; right: 12px; bottom: 12px; border-radius: 14px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: baseline; color: #141518"><span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">Reflections</span><span style="font-size: 12px; color: #5E6168">Room III</span></span>
       </a>
       <a href="collection.html" class="card" style="position: relative; display: block; aspect-ratio: 3 / 4; border-radius: 20px; overflow: hidden; background: #E6E4DE">
-        <img src="img/sugarcreek-clock.webp" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block">
+        <img loading="lazy" decoding="async" src="img/sugarcreek-clock.webp" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block">
         <span class="glass" style="position: absolute; left: 12px; right: 12px; bottom: 12px; border-radius: 14px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: baseline; color: #141518"><span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">Day trips</span><span style="font-size: 12px; color: #5E6168">Room IV</span></span>
       </a>
     </div>
@@ -184,7 +186,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
   <section id="about" class="reveal" style="background: #FFFFFF">
     <div style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 104px 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; gap: 64px">
       <figure style="flex: 1 1 420px; min-width: 0; margin: 0; position: relative; border-radius: 24px; overflow: hidden">
-        <img src="img/spring-grove-reflect.webp" alt="A white columned mausoleum reflected upside down in a pond ringed with autumn trees at Spring Grove" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block">
+        <img loading="lazy" decoding="async" src="img/spring-grove-reflect.webp" alt="A white columned mausoleum reflected upside down in a pond ringed with autumn trees at Spring Grove" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block">
         <figcaption class="glass" style="position: absolute; left: 16px; right: 16px; bottom: 16px; border-radius: 16px; padding: 16px 18px; font-size: 15px; line-height: 1.5; color: #141518">“I flipped this one on purpose. The reflection was sharper than the real thing that morning.” <span style="color: #5E6168">— from the caption, Spring Grove</span></figcaption>
       </figure>
       <div style="flex: 1 1 400px; min-width: 0; display: flex; flex-direction: column; gap: 22px">
@@ -204,7 +206,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
   <!-- MAP -->
   <section id="map" class="reveal" style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 104px 40px; box-sizing: border-box">
     <div style="position: relative; min-height: 560px; border-radius: 28px; overflow: hidden; background: #E6E4DE; display: flex; align-items: center">
-      <img src="img/bellevue-hill.webp" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 70%; filter: saturate(0.6)">
+      <img loading="lazy" decoding="async" src="img/bellevue-hill.webp" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 70%; filter: saturate(0.6)">
       <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(243,242,238,0.45)"></div>
       <span aria-hidden="true" style="position: absolute; left: 58%; top: 44%; width: 14px; height: 14px; border-radius: 50%; background: #0E5A6C; box-shadow: 0 0 0 10px rgba(14,90,108,0.18)"></span>
       <span aria-hidden="true" style="position: absolute; left: 66%; top: 58%; width: 14px; height: 14px; border-radius: 50%; background: #0E5A6C; box-shadow: 0 0 0 10px rgba(14,90,108,0.18)"></span>
@@ -228,7 +230,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
   <!-- NEWSLETTER -->
   <section class="reveal" style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 0 40px 104px; box-sizing: border-box">
     <div style="position: relative; overflow: hidden; border-radius: 28px; min-height: 380px; display: flex; align-items: center; justify-content: center; background: #E6E4DE">
-      <img src="img/spring-grove-autumn.webp" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+      <img loading="lazy" decoding="async" src="img/spring-grove-autumn.webp" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
       <div class="glass" style="position: relative; margin: 40px; max-width: 560px; border-radius: 22px; padding: 36px; display: flex; flex-direction: column; gap: 16px; text-align: center; align-items: center">
         <h2 style="margin: 0; font-size: 40px; font-weight: 500; line-height: 1.02; letter-spacing: -0.035em">Fog alerts.</h2>
         <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #5E6168">One email when a new print drops or a new story goes up. No schedule, no spam — just the good mornings.</p>

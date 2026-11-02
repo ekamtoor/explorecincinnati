@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F2EE">
 <title>explore.cincinnati — Story: The night the bridge disappeared</title>
 <meta name="description" content="Photographs, fine-art prints and the stories behind them — Cincinnati, seen slowly. Test site.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +42,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
   <header style="position: sticky; top: 0; z-index: 5; padding: 14px 24px; display: flex; justify-content: center">
     <div class="glass" style="width: 100%; max-width: 1320px; box-sizing: border-box; border-radius: 999px; padding: 8px 8px 8px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
       <a href="index.html" style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px"><span class="live" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #0E5A6C"></span>explore.cincinnati</a>
-      <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; font-weight: 500">
+      <nav id="primary-nav" aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; font-weight: 500">
         <a href="collection.html" style="padding: 10px 14px; border-radius: 999px">Collection</a>
         <a href="collection.html" style="padding: 10px 14px; border-radius: 999px; background: rgba(20,21,24,0.06)">Stories</a>
         <a href="index.html" style="padding: 10px 14px; border-radius: 999px">Map</a>
@@ -50,6 +51,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
       <div style="display: flex; align-items: center; gap: 6px">
         <a href="https://www.instagram.com/explore.cincinnati/" aria-label="Instagram" style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(20,21,24,0.12)"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle></svg></a>
         <a href="print.html" class="btn" style="display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; background: #141518; color: #F3F2EE; border-radius: 999px; font-size: 14px; font-weight: 600">Cart · 0</a>
+        <button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path class="m1" d="M4 8h16"></path><path class="m2" d="M4 16h16"></path></svg></button>
       </div>
     </div>
   </header>
@@ -58,7 +60,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
   <section style="max-width: 1360px; width: 100%; margin: 0 auto; padding: 40px 40px 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
     <nav aria-label="Breadcrumb" class="rise" style="font-size: 13px; color: #5E6168; display: flex; gap: 8px"><a href="collection.html" style="color: #5E6168">Stories</a><span>/</span><a href="collection.html" style="color: #5E6168">Fog &amp; Night</a><span>/</span><span style="color: #141518">No. 02</span></nav>
     <div class="rise d1" style="position: relative; height: 720px; border-radius: 28px; overflow: hidden; background: #E6E4DE; box-shadow: 0 30px 80px rgba(20,21,24,0.12)">
-      <img class="kb" src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog, reflected in the Ohio River" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%">
+      <img fetchpriority="high" class="kb" src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog, reflected in the Ohio River" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%">
       <div class="mist" aria-hidden="true" style="position: absolute; left: 10%; top: 20%; width: 80%; height: 60%; background: radial-gradient(closest-side, rgba(255,255,255,0.4), rgba(255,255,255,0)); filter: blur(40px); pointer-events: none"></div>
       <div class="glass-dark" style="position: absolute; left: 28px; right: 28px; bottom: 28px; max-width: 760px; border-radius: 22px; padding: 28px 30px; display: flex; flex-direction: column; gap: 12px">
         <span style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.85">No. 02 · Roebling Bridge · [DATE] · 5 min read</span>
@@ -82,7 +84,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
         <dt style="color: #5E6168">Gallery</dt><dd style="margin: 0">Fog &amp; Night, Room I</dd>
       </dl>
       <a href="print.html" class="lift" style="display: flex; gap: 14px; align-items: center; padding: 12px; border-radius: 16px; background: #FFFFFF; color: #141518">
-        <span style="flex: 0 0 64px; height: 64px; border-radius: 10px; overflow: hidden; background: #E6E4DE; display: block"><img src="img/roebling-fog.webp" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block"></span>
+        <span style="flex: 0 0 64px; height: 64px; border-radius: 10px; overflow: hidden; background: #E6E4DE; display: block"><img loading="lazy" decoding="async" src="img/roebling-fog.webp" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block"></span>
         <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">Own this print</span><span style="font-size: 12px; color: #5E6168">from $65 · signed &amp; numbered</span></span>
         <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: auto"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
       </a>
@@ -95,7 +97,7 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
       <p style="margin: 0; font-size: 26px; line-height: 1.45; color: #141518; font-weight: 500; letter-spacing: -0.01em">[The full Instagram caption lives here, formatted as proper paragraphs. The first paragraph is set larger as the lede.]</p>
       <p style="margin: 0">[Second paragraph — the history of the Roebling: opened in 1866, the prototype for Brooklyn, why the fog settles on the river on nights like this one…]</p>
       <figure style="margin: 12px 0; display: flex; flex-direction: column; gap: 10px">
-        <img src="img/skyline-fog.webp" alt="Downtown Cincinnati skyline in night fog" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px; display: block">
+        <img loading="lazy" decoding="async" src="img/skyline-fog.webp" alt="Downtown Cincinnati skyline in night fog" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px; display: block">
         <figcaption style="font-size: 13px; color: #5E6168">Same night, from Smale Park — the city floating. Also on view as No. 01.</figcaption>
       </figure>
       <p style="margin: 0">[Third paragraph — how the shot was made: the wait, the tripod, the car headlights that almost ruined it, the frame that finally worked.]</p>
@@ -117,9 +119,9 @@ a{color:#141518;text-decoration:none}a:hover{color:#0E5A6C}
         <a href="collection.html" style="font-size: 14px; font-weight: 600; color: #0E5A6C">All stories →</a>
       </div>
       <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
-        <a href="story.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/tunnel-neon.webp" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168; padding: 0 4px">No. 03 · [Neighborhood]</span><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">A doorway to somewhere else</span></a>
-        <a href="story.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/bellevue-hill.webp" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168; padding: 0 4px">No. 04 · Bellevue Hill</span><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">The concrete lilypads nobody looks up at</span></a>
-        <a href="story.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img src="img/sugarcreek-clock.webp" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168; padding: 0 4px">No. 07 · Sugarcreek, OH</span><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">The world's largest cuckoo clock</span></a>
+        <a href="story.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img loading="lazy" decoding="async" src="img/tunnel-neon.webp" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168; padding: 0 4px">No. 03 · [Neighborhood]</span><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">A doorway to somewhere else</span></a>
+        <a href="story.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img loading="lazy" decoding="async" src="img/bellevue-hill.webp" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168; padding: 0 4px">No. 04 · Bellevue Hill</span><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">The concrete lilypads nobody looks up at</span></a>
+        <a href="story.html" class="card" style="display: flex; flex-direction: column; gap: 10px"><span style="display: block; border-radius: 20px; overflow: hidden; background: #E6E4DE"><img loading="lazy" decoding="async" src="img/sugarcreek-clock.webp" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block"></span><span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6168; padding: 0 4px">No. 07 · Sugarcreek, OH</span><span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; padding: 0 4px">The world's largest cuckoo clock</span></a>
       </div>
     </div>
   </section>
