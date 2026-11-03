@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F3F0E8">
+<script src="js/theme-init.js"></script>
 <title>explore.cincinnati — Cincinnati, on view</title>
 <meta name="description" content="Photographs, fine-art prints and the stories behind them — Cincinnati, seen slowly, and a map that grows with every post.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,73 +14,115 @@
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <link rel="stylesheet" href="theme.css">
 <style>
-  /* Hero */
-  .hero { padding-top: clamp(40px, 7vw, 96px); }
-  .hero-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 32px 64px; }
-  .hero-side { display: flex; flex-direction: column; gap: 28px; padding-bottom: 10px; max-width: 400px; }
-  .hero-ctas { display: flex; flex-wrap: wrap; gap: 10px; }
-  .hero-figure { margin: clamp(40px, 6vw, 80px) 0 0; }
-  .hero-figure .plate-frame img { animation: settle 2.4s var(--ease) both; object-position: center 45%; }
-  @keyframes settle { from { transform: scale(1.06); filter: blur(6px) brightness(1.1); } to { transform: none; filter: none; } }
-  .hero-cap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px 32px; padding-top: 16px; }
-  .hero-cap .h3 { font-family: var(--serif); font-weight: 400; font-size: 1.5rem; letter-spacing: -0.01em; }
-  @media (max-width: 860px) { .hero-top { grid-template-columns: 1fr; } .hero-side { max-width: none; } }
+  /* ---------- Opening: the photographs, edge to edge ---------- */
+  .opening { position: relative; height: 100svh; min-height: 560px; overflow: hidden; background: #0F0E0C; color: #F3F0E8; }
+  .slides { position: absolute; inset: 0; }
+  .slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.8s var(--ease); }
+  .slide.is-on { opacity: 1; }
+  .slide img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.08); transition: transform 9s linear; }
+  .slide.is-on img { transform: scale(1); }
+  .opening::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(10,9,8,.55) 0%, rgba(10,9,8,0) 22%, rgba(10,9,8,0) 48%, rgba(10,9,8,.72) 100%); }
+  .opening-inner { position: absolute; inset: auto 0 0 0; z-index: 2; padding-bottom: clamp(28px, 5vw, 64px); }
+  .opening-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 28px 48px; }
+  .opening-title { margin: 0; font-family: var(--serif); font-weight: 500; font-size: clamp(3.6rem, 11vw, 11.5rem); line-height: .84; letter-spacing: -0.025em; }
+  .opening-title em { font-style: italic; }
+  .opening-title .line { display: block; overflow: hidden; padding-bottom: .06em; }
+  .opening-title .line > span { display: block; animation: lift 1.4s var(--ease) both; }
+  .opening-title .line:nth-child(2) > span { animation-delay: .15s; }
+  @keyframes lift { from { transform: translateY(105%); } }
+  .opening-side { display: flex; flex-direction: column; gap: 18px; align-items: flex-end; text-align: right; padding-bottom: 12px; animation: rise 1.2s .5s var(--ease) both; }
+  .now { display: flex; flex-direction: column; gap: 2px; font-size: .85rem; letter-spacing: .02em; color: rgba(243,240,232,.85); min-height: 3.4em; }
+  .now-title { font-family: var(--serif); font-size: 1.5rem; color: #F3F0E8; }
+  .now a { color: inherit; }
+  .ticks { display: flex; gap: 8px; }
+  .tick { position: relative; width: 44px; height: 30px; padding: 0; border: 0; background: none; cursor: pointer; color: rgba(243,240,232,.6); font-family: var(--serif); font-style: italic; font-size: .95rem; text-align: left; }
+  .tick::after { content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 1px; background: rgba(243,240,232,.3); }
+  .tick span { position: absolute; left: 0; bottom: 4px; height: 1px; width: 0; background: #F3F0E8; z-index: 1; }
+  .tick.is-on { color: #F3F0E8; }
+  .tick.is-on span { animation: tick var(--dur, 7s) linear both; }
+  .opening.is-paused .tick.is-on span { animation-play-state: paused; }
+  @keyframes tick { to { width: 100%; } }
+  .scroll-cue { position: absolute; left: 50%; bottom: 22px; z-index: 2; width: 1px; height: 46px; background: linear-gradient(rgba(243,240,232,0), rgba(243,240,232,.8)); animation: cue 2.4s var(--ease) infinite; }
+  @keyframes cue { 0% { transform: scaleY(0); transform-origin: top; } 45% { transform: scaleY(1); transform-origin: top; } 55% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+  @media (max-width: 760px) {
+    .opening-grid { grid-template-columns: 1fr; }
+    .opening-side { align-items: flex-start; text-align: left; }
+    .scroll-cue { display: none; }
+  }
 
-  /* Lately — staggered, like works hung at different heights */
-  .lately { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px); align-items: start; }
+  /* ---------- Statement, with the photographs set into the sentence ---------- */
+  .statement { margin: 0; max-width: 21ch; font-family: var(--serif); font-weight: 500; font-size: clamp(2.2rem, 5.2vw, 5.2rem); line-height: 1.08; letter-spacing: -0.015em; }
+  .statement em { font-style: italic; }
+  .inset { display: inline-block; width: 1.9em; height: .82em; margin: 0 .08em; vertical-align: -.06em; overflow: hidden; border-radius: 999px; background: var(--paper-3); transition: width .7s var(--ease); }
+  .inset img { width: 100%; height: 100%; object-fit: cover; }
+  .inset:hover { width: 3.2em; }
+  .statement-foot { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 32px clamp(40px, 6vw, 96px); margin-top: clamp(48px, 7vw, 96px); padding-top: 28px; border-top: 1px solid var(--rule); }
+  .statement-foot p { margin: 0; color: var(--ink-2); max-width: 46ch; }
+  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .fact { display: flex; flex-direction: column; gap: 4px; padding-right: 16px; }
+  .fact + .fact { padding-left: 20px; border-left: 1px solid var(--rule); }
+  .fact-n { font-family: var(--serif); font-size: clamp(2.4rem, 4vw, 3.6rem); line-height: 1; }
+  .fact-n small { font-size: .42em; color: var(--muted); }
+  @media (max-width: 860px) { .statement-foot { grid-template-columns: 1fr; } }
+
+  /* ---------- Lately: hung at different heights ---------- */
+  .head-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 16px 40px; margin-bottom: clamp(36px, 5vw, 72px); }
+  .lately { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 56px); align-items: start; }
   .lately-item { display: flex; flex-direction: column; gap: 16px; }
-  .lately-item:nth-child(2) { margin-top: clamp(48px, 9vw, 140px); }
-  .lately-item:nth-child(3) { margin-top: clamp(20px, 4vw, 56px); }
+  .lately-item:nth-child(2) { margin-top: clamp(56px, 10vw, 160px); }
+  .lately-item:nth-child(3) { margin-top: clamp(24px, 4vw, 64px); }
   .lately-item .plate-frame { position: relative; }
-  .lately-item:hover .plate-frame img { transform: scale(1.035); }
   .lately-badge { position: absolute; top: 14px; left: 14px; }
-  .lately-skel { aspect-ratio: 4 / 5; background: var(--paper-2); border-radius: 3px; }
+  .lately-skel { aspect-ratio: 4 / 5; background: var(--paper-2); }
   @media (max-width: 760px) {
     .lately { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 16px; margin-inline: calc(-1 * var(--gutter)); padding: 0 var(--gutter) 8px; scrollbar-width: none; }
     .lately::-webkit-scrollbar { display: none; }
     .lately > * { flex: 0 0 78%; scroll-snap-align: start; margin-top: 0 !important; }
   }
 
-  /* Map teaser */
-  .map-teaser { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
-  .map-copy { display: flex; flex-direction: column; gap: 28px; }
-  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); }
-  .stat { display: flex; flex-direction: column; gap: 2px; padding: 18px 16px 0 0; }
-  .stat + .stat { padding-left: 16px; border-left: 1px solid var(--rule); }
-  .stat-n { font-family: var(--serif); font-size: clamp(2.4rem, 4vw, 3.4rem); line-height: 1; letter-spacing: -0.02em; }
-  .stat-n small { font-size: .45em; color: var(--muted); letter-spacing: 0; }
-  .mini-map-wrap { position: relative; display: block; aspect-ratio: 5 / 4; border-radius: 3px; overflow: hidden; background: var(--paper-2); }
+  /* ---------- The map ---------- */
+  .atlas { background: var(--paper-2); }
+  .atlas-grid { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: clamp(32px, 5vw, 80px); align-items: end; }
+  .atlas-map { position: relative; aspect-ratio: 16 / 11; background: var(--paper-3); overflow: hidden; }
   .mini-map { position: absolute; inset: 0; }
-  .mini-map-open { position: absolute; right: 16px; bottom: 16px; z-index: 500; }
-  .mini-map-latest { position: absolute; left: 16px; top: 16px; z-index: 500; max-width: calc(100% - 32px); }
-  @media (max-width: 860px) { .map-teaser { grid-template-columns: 1fr; } .mini-map-wrap { aspect-ratio: 4 / 5; } }
+  .atlas-map .badge { position: absolute; left: 16px; top: 16px; z-index: 500; }
+  .atlas-copy { display: flex; flex-direction: column; gap: 28px; }
+  .atlas-count { font-family: var(--serif); font-size: clamp(5rem, 11vw, 10rem); line-height: .8; letter-spacing: -0.03em; }
+  .atlas-count small { font-size: .3em; letter-spacing: 0; color: var(--muted); }
+  .atlas-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); font-size: .9rem; }
+  .atlas-list li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+  .atlas-list li span:last-child { color: var(--muted); }
+  @media (max-width: 960px) { .atlas-grid { grid-template-columns: 1fr; } .atlas-map { aspect-ratio: 4 / 5; } }
 
-  /* Print of the month */
-  .pom { background: var(--paper-2); }
-  .pom-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(40px, 6vw, 112px); align-items: center; }
-  .wall { position: relative; display: flex; justify-content: center; padding: clamp(32px, 6vw, 88px) 0; }
-  .frame { width: min(100%, 440px); padding: clamp(18px, 2.6vw, 34px); background: var(--white); border: clamp(8px, 1vw, 12px) solid var(--ink); box-shadow: 0 2px 0 rgba(0,0,0,.04), 0 40px 70px -20px rgba(22,23,25,.4); transition: transform .8s var(--ease); }
-  .frame:hover { transform: translateY(-4px); }
-  .frame img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
-  .wall-light { position: absolute; top: 0; left: 50%; width: 70%; height: 60%; transform: translateX(-50%); background: radial-gradient(ellipse at top, rgba(255,250,235,.85), rgba(255,250,235,0) 70%); pointer-events: none; }
-  .pom-copy { display: flex; flex-direction: column; gap: 26px; }
-  .spec { margin: 0; display: grid; grid-template-columns: auto 1fr; border-top: 1px solid var(--rule); font-size: .92rem; }
-  .spec dt, .spec dd { margin: 0; padding: 12px 0; border-bottom: 1px solid var(--rule); }
-  .spec dt { color: var(--muted); padding-right: 32px; }
-  .sizes { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
-  .sizes li { padding: 7px 14px; border: 1px solid var(--rule); border-radius: 999px; font-size: .82rem; }
-  @media (max-width: 860px) { .pom-grid { grid-template-columns: 1fr; } }
+  /* ---------- Print of the month, in the room, with wall lettering ---------- */
+  .pom .room-track { height: clamp(600px, 80vh, 820px); justify-content: center; gap: clamp(40px, 7vw, 120px); }
+  .wall-text { position: relative; z-index: 1; max-width: 360px; color: #3A3329; align-self: center; margin-top: -4vh; }
+  .wall-text .eyebrow { color: #6E6458; }
+  .wall-text h2 { margin: 14px 0 18px; font-family: var(--serif); font-weight: 500; font-size: clamp(2.6rem, 4.4vw, 4.4rem); line-height: .95; letter-spacing: -0.015em; color: #2B2620; mix-blend-mode: multiply; }
+  .wall-text p { margin: 0; font-size: .95rem; line-height: 1.6; color: #4E463C; }
+  html[data-theme="night"] .wall-text, html[data-theme="night"] .wall-text h2, html[data-theme="night"] .wall-text p { color: #CFC6B6; mix-blend-mode: normal; }
+  html[data-theme="night"] .wall-text .eyebrow { color: #9A9080; }
+  .pom .hung { margin-top: -4vh; }
+  .pom .hung-frame { width: clamp(260px, 24vw, 380px); }
+  .pom-buy { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; padding-block: 22px; }
+  .sizes { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0; list-style: none; font-size: .85rem; color: var(--muted); }
+  @media (max-width: 860px) {
+    .pom .room-track { flex-direction: column; height: auto; padding-top: 56px; padding-bottom: calc(var(--floor) + var(--skirt) + 40px); gap: 36px; align-items: flex-start; width: 100%; }
+    .wall-text, .pom .hung { margin-top: 0; }
+    .pom .hung { flex-direction: column; align-items: flex-start; gap: 18px; }
+    .pom .hung-frame { width: min(84vw, 360px); }
+  }
 
-  /* Rooms — an index, with the picture appearing on hover */
+  /* ---------- Rooms index ---------- */
   .rooms { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
   .room-row { position: relative; display: grid; grid-template-columns: 80px minmax(0, 1fr) auto 40px; align-items: center; gap: 24px; padding: clamp(18px, 2.4vw, 30px) 0; border-bottom: 1px solid var(--rule); }
-  .room-row .num { font-size: 1.1rem; }
-  .room-name { font-family: var(--serif); font-size: clamp(2.2rem, 5.6vw, 5.2rem); line-height: 1; letter-spacing: -0.02em; transition: transform .5s var(--ease), color .3s; }
-  .room-row:hover .room-name { transform: translateX(12px); }
+  .room-row .num { font-size: 1.2rem; }
+  .room-name { font-family: var(--serif); font-weight: 500; font-size: clamp(2.4rem, 6vw, 5.6rem); line-height: 1; letter-spacing: -0.02em; transition: transform .6s var(--ease), color .3s; }
+  .room-row:hover .room-name { transform: translateX(14px); }
   .room-row:hover .room-name em { color: var(--amber-ink); }
   .room-arrow { justify-self: end; transition: transform .4s var(--ease); }
   .room-row:hover .room-arrow { transform: translateX(4px); }
-  .room-peek { position: absolute; right: 18%; top: 50%; width: clamp(160px, 18vw, 260px); aspect-ratio: 4 / 5; object-fit: cover; border-radius: 3px; pointer-events: none; opacity: 0; transform: translateY(-50%) rotate(-3deg) scale(.92); transition: opacity .35s var(--ease), transform .5s var(--ease); z-index: 2; box-shadow: 0 30px 60px -20px rgba(22,23,25,.45); }
+  .room-peek { position: absolute; right: 18%; top: 50%; width: clamp(160px, 18vw, 260px); aspect-ratio: 4 / 5; object-fit: cover; pointer-events: none; opacity: 0; transform: translateY(-50%) rotate(-3deg) scale(.92); transition: opacity .35s var(--ease), transform .6s var(--ease); z-index: 2; box-shadow: 0 30px 60px -20px rgba(22,23,25,.45); }
   .room-row:hover .room-peek { opacity: 1; transform: translateY(-50%) rotate(-2deg) scale(1); }
   .rooms li:nth-child(even) .room-peek { right: 30%; transform: translateY(-50%) rotate(3deg) scale(.92); }
   .rooms li:nth-child(even) .room-row:hover .room-peek { transform: translateY(-50%) rotate(2deg) scale(1); }
@@ -92,172 +135,145 @@
     .room-arrow { grid-column: 3; grid-row: 1 / span 2; }
   }
 
-  /* Captions / about */
-  .about-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(40px, 7vw, 120px); align-items: center; }
-  .quote { margin: 0; font-family: var(--serif); font-size: clamp(2rem, 4.2vw, 3.8rem); line-height: 1.04; letter-spacing: -0.015em; }
-  .quote::before { content: "“"; display: block; height: .5em; color: var(--amber); font-size: 1.6em; line-height: 1; }
-  .about-copy { display: flex; flex-direction: column; gap: 28px; }
-  @media (max-width: 860px) { .about-grid { grid-template-columns: 1fr; } }
-
-  /* Newsletter */
-  .alerts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px 80px; align-items: end; }
+  /* ---------- Fog alerts ---------- */
+  .alerts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 80px; align-items: end; }
   .alerts form { display: flex; flex-direction: column; gap: 14px; }
-  .alerts .field-line .btn { height: 44px; }
+  .alerts .field-line .btn { height: 46px; }
   @media (max-width: 860px) { .alerts { grid-template-columns: 1fr; } }
 </style>
 <script src="js/site.js" defer></script>
 <script src="vendor/leaflet/leaflet.js" defer></script>
 <script src="js/map.js" defer></script>
 </head>
-<body>
+<body class="home">
 
-<header class="site-header">
+<header class="site-header site-header--over">
   <div class="wrap header-row">
-    <a class="brand" href="index.html" aria-label="explore.cincinnati, home"><span class="brand-dot" aria-hidden="true"></span>explore.cincinnati</a>
+    <a class="brand" href="index.html" aria-label="explore.cincinnati, home"><span class="brand-dot" aria-hidden="true"></span><span class="brand-name">explore<span class="brand-sep">.</span>cincinnati</span></a>
     <nav id="primary-nav" class="nav" aria-label="Primary">
-      <a href="collection.html"><span class="nav-num">01</span>Collection</a>
-      <a href="collection.html#stories"><span class="nav-num">02</span>Stories</a>
-      <a href="map.html"><span class="nav-num">03</span>Map</a>
-      <a href="index.html#about"><span class="nav-num">04</span>About</a>
+      <a href="collection.html">Works</a>
+      <a href="map.html">Map</a>
+      <a href="collection.html#stories">Stories</a>
     </nav>
     <div class="header-actions">
-      <a class="cart" href="print.html">Cart <span class="cart-count">0</span></a>
-      <button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path class="m1" d="M4 8.5h16"/><path class="m2" d="M4 15.5h16"/></svg></button>
+      <button type="button" class="lights" aria-pressed="false" aria-label="Lights: switch between day and night" title="Lights"><span class="lights-lamp" aria-hidden="true"></span></button>
+      <button type="button" class="index-toggle" aria-expanded="false" aria-controls="index-panel"><span>Index</span><span class="index-count" aria-hidden="true"></span></button>
+      <a class="cart" href="print.html" aria-label="Cart">Cart <span class="cart-count">0</span></a>
     </div>
   </div>
 </header>
 
 <main>
-  <!-- HERO -->
-  <section class="hero wrap">
-    <div class="hero-top">
-      <div style="display:flex;flex-direction:column;gap:28px">
-        <p class="eyebrow rise">A living collection · Cincinnati, Ohio</p>
-        <h1 class="display rise d1">Cincinnati,<br><em>on view.</em></h1>
-      </div>
-      <div class="hero-side rise d2">
-        <p class="lede">Photographs of the Queen City, hung like a gallery — every piece with its label, its story, and a place on the map. Most are available as prints.</p>
-        <div class="hero-ctas">
-          <a class="btn" href="collection.html">Browse the collection</a>
-          <a class="btn btn--ghost" href="map.html">Open the map</a>
+  <!-- OPENING -->
+  <section class="opening" aria-label="Recent photographs">
+    <div class="slides" id="slides">
+      <figure class="slide is-on" data-id="fog-over-the-ohio"><img src="img/skyline-fog.webp" alt="Downtown Cincinnati skyline glowing through night fog, reflected in the Ohio River" fetchpriority="high"></figure>
+    </div>
+    <div class="wrap opening-inner">
+      <div class="opening-grid">
+        <h1 class="opening-title"><span class="line"><span>Cincinnati,</span></span><span class="line"><span><em>on view.</em></span></span></h1>
+        <div class="opening-side">
+          <p class="now" id="now" aria-live="polite"><span class="num" style="color:inherit">No. 01</span><a class="now-title" href="stories/fog-over-the-ohio">When the city floats</a><span>Smale Riverfront Park</span></p>
+          <div class="ticks" id="ticks" role="group" aria-label="Choose a photograph"></div>
         </div>
       </div>
     </div>
-    <figure class="hero-figure plate rise d3">
-      <div class="plate-frame ratio-wide">
-        <img src="img/skyline-fog.webp" alt="Downtown Cincinnati skyline glowing through night fog, reflected in the Ohio River" fetchpriority="high">
-      </div>
-      <figcaption class="hero-cap">
-        <span style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap"><span class="num">No. 01</span><span class="h3">Fog over the Ohio</span><span class="meta">Smale Riverfront Park · Archival pigment print</span></span>
-        <a class="link" href="print.html">Available as a print <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      </figcaption>
-    </figure>
+    <span class="scroll-cue" aria-hidden="true"></span>
   </section>
 
-  <!-- LATELY (from data/posts.json) -->
-  <section class="section wrap" aria-labelledby="lately-h">
-    <div class="section-head">
-      <div>
-        <p class="eyebrow">Gallery I · Lately</p>
-        <h2 class="h2" id="lately-h">Fresh off <em>the feed.</em></h2>
+  <!-- STATEMENT -->
+  <section id="about" class="section wrap" aria-label="About">
+    <p class="statement reveal">Cincinnati is best seen slowly — <a class="inset" href="stories/fog-over-the-ohio" aria-label="When the city floats"><img src="img/skyline-fog.webp" alt="" loading="lazy" decoding="async"></a> in fog over the Ohio, <a class="inset" href="stories/roebling-fog" aria-label="The night the bridge disappeared"><img src="img/roebling-fog.webp" alt="" loading="lazy" decoding="async"></a> from the Covington landing at midnight, <a class="inset" href="stories/bellevue-hill" aria-label="The concrete lilypads"><img src="img/bellevue-hill.webp" alt="" loading="lazy" decoding="async"></a> under concrete <em>nobody looks up at.</em></p>
+    <div class="statement-foot">
+      <p>A living collection by [PHOTOGRAPHER NAME]. Every photograph posted to @explore.cincinnati hangs here with its full caption, the exact spot it was taken, and — for most of them — a signed print you can take home.</p>
+      <div class="facts">
+        <div class="fact"><span class="fact-n" data-stat="posts">–</span><span class="meta">works on view</span></div>
+        <div class="fact"><span class="fact-n"><span data-stat="neighborhoods">–</span><small> / <span data-stat="neighborhoods-total">–</span></small></span><span class="meta">neighborhoods</span></div>
+        <div class="fact"><span class="fact-n">[N]k</span><span class="meta">following along</span></div>
       </div>
-      <a class="link" href="https://www.instagram.com/explore.cincinnati/" target="_blank" rel="noopener">Follow @explore.cincinnati <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </section>
+
+  <!-- LATELY -->
+  <section class="section rule-top wrap" aria-labelledby="lately-h" style="padding-top:clamp(64px,9vw,128px)">
+    <div class="head-row">
+      <h2 class="h2" id="lately-h">Lately</h2>
+      <a class="link" href="collection.html#stories">All the stories <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
     <div class="lately" data-latest="3">
-      <div class="lately-skel"></div><div class="lately-skel" style="margin-top:clamp(48px,9vw,140px)"></div><div class="lately-skel"></div>
+      <div class="lately-skel"></div><div class="lately-skel" style="margin-top:clamp(56px,10vw,160px)"></div><div class="lately-skel"></div>
     </div>
   </section>
 
-  <!-- MAP TEASER -->
-  <section class="section rule-top wrap" aria-labelledby="map-h" id="map">
-    <div class="map-teaser">
-      <div class="map-copy reveal">
-        <p class="eyebrow">The map</p>
-        <h2 class="h2" id="map-h">A map that grows <em>with every post.</em></h2>
-        <p class="lede">Every photograph is pinned to the spot it was taken. Each new post adds a pin, extends the route, and checks off another neighborhood. Go stand in the same place.</p>
-        <div class="stats">
-          <div class="stat"><span class="stat-n" data-stat="pinned">–</span><span class="meta">places pinned</span></div>
-          <div class="stat"><span class="stat-n"><span data-stat="neighborhoods">–</span><small> / <span data-stat="neighborhoods-total">–</span></small></span><span class="meta">neighborhoods</span></div>
-          <div class="stat"><span class="stat-n" data-stat="posts">–</span><span class="meta">stories</span></div>
-        </div>
-        <div><a class="btn" href="map.html">Explore the map <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
-      </div>
-      <div class="mini-map-wrap reveal">
-        <div class="mini-map" data-mini-map role="img" aria-label="Map of Cincinnati with a pin for each explore.cincinnati post"></div>
-        <span class="badge mini-map-latest"><span class="dot"></span>Latest · <span data-stat="latest">…</span></span>
-        <a class="btn btn--light mini-map-open" href="map.html">Open full map</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRINT OF THE MONTH -->
-  <section class="pom section" aria-labelledby="pom-h">
-    <div class="wrap pom-grid">
-      <a class="wall reveal" href="print.html" aria-label="View the Roebling print">
-        <span class="wall-light" aria-hidden="true"></span>
-        <span class="frame"><img src="img/roebling-fog.webp" alt="Framed print of the Roebling Bridge in fog" loading="lazy" decoding="async"></span>
+  <!-- THE MAP -->
+  <section id="map" class="atlas section" aria-labelledby="atlas-h">
+    <div class="wrap atlas-grid">
+      <a class="atlas-map reveal" href="map.html" aria-label="Open the living map">
+        <div class="mini-map" data-mini-map role="img" aria-label="Map of Cincinnati: neighborhoods photographed so far are filled in amber"></div>
+        <span class="badge"><span class="dot"></span>Latest · <span data-stat="latest">…</span></span>
       </a>
-      <div class="pom-copy reveal">
-        <p class="eyebrow">Print of the month</p>
-        <h2 class="h2" id="pom-h">Roebling, <em>in the fog.</em></h2>
-        <dl class="spec">
-          <dt>Medium</dt><dd>Archival pigment print, cotton matte</dd>
-          <dt>Edition</dt><dd>[N], signed and numbered</dd>
-          <dt>Made in</dt><dd>Cincinnati, Ohio</dd>
-        </dl>
-        <ul class="sizes"><li>8 × 10</li><li>12 × 16</li><li>16 × 20</li><li>24 × 30</li><li>Framed</li></ul>
-        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px">
-          <a class="btn" href="print.html">View print · from $65</a>
-          <span class="meta">[N] remaining</span>
+      <div class="atlas-copy reveal">
+        <h2 class="h2" id="atlas-h">The city, <em>filling in.</em></h2>
+        <div class="atlas-count"><span data-stat="neighborhoods">–</span><small> of <span data-stat="neighborhoods-total">–</span> neighborhoods</small></div>
+        <p class="lede">Every photograph is pinned where it was taken. Each new post drops a pin and lights up its neighborhood — the map grows at the pace of the feed.</p>
+        <ul class="atlas-list">
+          <li><span>Places pinned</span><span data-stat="pinned">–</span></li>
+          <li><span>Last pin</span><span data-stat="latest-date">–</span></li>
+        </ul>
+        <div><a class="btn" href="map.html">Open the living map <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRINT OF THE MONTH, in the room -->
+  <section class="pom" aria-labelledby="pom-h">
+    <div class="room">
+      <div class="room-track">
+        <div class="surface wall" aria-hidden="true"></div>
+        <div class="surface sun sun--glow" aria-hidden="true"></div>
+        <div class="surface sun" aria-hidden="true"></div>
+        <div class="surface skirting" aria-hidden="true"></div>
+        <div class="surface floor" aria-hidden="true"></div>
+        <div class="wall-text">
+          <p class="eyebrow">Print of the month</p>
+          <h2 id="pom-h">Roebling, <em>in the fog.</em></h2>
+          <p>The suspension bridge that came before Brooklyn’s, on a night the far tower never showed up. Archival pigment on cotton, signed and numbered.</p>
+        </div>
+        <div class="hung">
+          <a class="hung-frame" href="prints/roebling-fog" aria-label="Roebling, in the fog — view print"><span class="plate-frame ratio-11"><img src="img/roebling-fog.webp" alt="Framed print of the Roebling Bridge in fog" loading="lazy"></span></a>
+          <div class="placard">
+            <span class="num">No. 02</span>
+            <span class="placard-title">Roebling, in the fog</span>
+            <span class="placard-place">Covington landing</span>
+            <span class="meta">Edition of [N] · from $65</span>
+            <div class="placard-links"><a class="link" href="prints/roebling-fog">View print</a><a class="link link--quiet" href="stories/roebling-fog">Read the story</a></div>
+          </div>
         </div>
       </div>
+    </div>
+    <div class="wrap pom-buy">
+      <ul class="sizes"><li>8 × 10</li><li>12 × 16</li><li>16 × 20</li><li>24 × 30</li><li>Framed in oak</li></ul>
+      <a class="btn" href="prints/roebling-fog">Choose a size · from $65</a>
     </div>
   </section>
 
   <!-- ROOMS -->
   <section class="section wrap" aria-labelledby="rooms-h">
-    <div class="section-head">
-      <div>
-        <p class="eyebrow">Browse by gallery</p>
-        <h2 class="h2" id="rooms-h">Four <em>rooms.</em></h2>
-      </div>
-    </div>
+    <div class="head-row"><h2 class="h2" id="rooms-h">Four rooms</h2><a class="link" href="collection.html">Walk the collection <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
     <ul class="rooms">
-      <li><a class="room-row" href="collection.html"><span class="num">I</span><span class="room-name">Fog <em>&amp;</em> Night</span><span class="meta" data-room-count="Fog &amp; Night"></span><svg class="room-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><img class="room-peek" src="img/skyline-fog.webp" alt="" loading="lazy" decoding="async"></a></li>
-      <li><a class="room-row" href="collection.html"><span class="num">II</span><span class="room-name"><em>Autumn</em></span><span class="meta" data-room-count="Autumn"></span><svg class="room-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><img class="room-peek" src="img/bellevue-hill.webp" alt="" loading="lazy" decoding="async"></a></li>
-      <li><a class="room-row" href="collection.html"><span class="num">III</span><span class="room-name">Reflections</span><span class="meta" data-room-count="Reflections"></span><svg class="room-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><img class="room-peek" src="img/spring-grove-reflect.webp" alt="" loading="lazy" decoding="async"></a></li>
-      <li><a class="room-row" href="collection.html"><span class="num">IV</span><span class="room-name">Day <em>trips</em></span><span class="meta" data-room-count="Day trips"></span><svg class="room-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><img class="room-peek" src="img/sugarcreek-clock.webp" alt="" loading="lazy" decoding="async"></a></li>
+      <li><a class="room-row" href="collection.html"><span class="num">I</span><span class="room-name">Fog <em>&amp;</em> Night</span><span class="meta" data-room-count="Fog &amp; Night"></span><svg class="room-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><img class="room-peek" src="img/skyline-fog.webp" alt="" loading="lazy" decoding="async"></a></li>
+      <li><a class="room-row" href="collection.html"><span class="num">II</span><span class="room-name"><em>Autumn</em></span><span class="meta" data-room-count="Autumn"></span><svg class="room-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><img class="room-peek" src="img/bellevue-hill.webp" alt="" loading="lazy" decoding="async"></a></li>
+      <li><a class="room-row" href="collection.html"><span class="num">III</span><span class="room-name">Reflections</span><span class="meta" data-room-count="Reflections"></span><svg class="room-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><img class="room-peek" src="img/spring-grove-reflect.webp" alt="" loading="lazy" decoding="async"></a></li>
+      <li><a class="room-row" href="collection.html"><span class="num">IV</span><span class="room-name">Day <em>trips</em></span><span class="meta" data-room-count="Day trips"></span><svg class="room-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><img class="room-peek" src="img/sugarcreek-clock.webp" alt="" loading="lazy" decoding="async"></a></li>
     </ul>
   </section>
 
-  <!-- ABOUT / CAPTIONS -->
-  <section id="about" class="section rule-top wrap" aria-labelledby="about-h">
-    <div class="about-grid">
-      <figure class="plate reveal">
-        <div class="plate-frame ratio-45"><img src="img/spring-grove-reflect.webp" alt="A white columned mausoleum reflected upside down in a pond ringed with autumn trees at Spring Grove" loading="lazy" decoding="async"></div>
-        <figcaption class="meta">No. 05 · Spring Grove — shown as posted, upside down.</figcaption>
-      </figure>
-      <div class="about-copy reveal">
-        <p class="eyebrow">Why the captions matter</p>
-        <blockquote class="quote" id="about-h">I flipped this one on purpose. The reflection was sharper than the real thing that morning.</blockquote>
-        <p class="lede" style="max-width:52ch">On Instagram the captions run long on purpose: the history of the spot, the time of night, the settings, the near-misses. Here they hang beside the photograph like a wall label — readable, searchable, pinned to the map, and linked to the print.</p>
-        <div class="stats">
-          <div class="stat"><span class="stat-n" data-stat="posts">–</span><span class="meta">stories published</span></div>
-          <div class="stat"><span class="stat-n" data-stat="neighborhoods">–</span><span class="meta">neighborhoods</span></div>
-          <div class="stat"><span class="stat-n">[N]k</span><span class="meta">following along</span></div>
-        </div>
-        <div><a class="link" href="collection.html#stories">Read the stories <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
-      </div>
-    </div>
-  </section>
-
   <!-- FOG ALERTS -->
-  <section class="section--tight wrap" aria-labelledby="alerts-h" style="padding-bottom:clamp(72px,10vw,140px)">
+  <section class="wrap" aria-labelledby="alerts-h" style="padding-bottom:clamp(80px,11vw,150px)">
     <div class="alerts rule-top" style="padding-top:clamp(40px,6vw,72px)">
       <div style="display:flex;flex-direction:column;gap:18px">
-        <p class="eyebrow">Newsletter</p>
         <h2 class="h2" id="alerts-h">Fog <em>alerts.</em></h2>
-        <p class="lede">One email when a new print drops or a new pin goes on the map. No schedule, no spam — just the good mornings.</p>
+        <p class="lede">One email when a new print drops or a new pin lands on the map. No schedule, no spam — just the good mornings.</p>
       </div>
       <form onsubmit="event.preventDefault(); this.querySelector('[role=status]').textContent = 'Thanks! (Sign-up isn’t connected on this test site yet.)';">
         <label class="sr-only" for="nl-email">Email address</label>
@@ -286,5 +302,44 @@
     <div class="footer-base"><span>© 2026 explore.cincinnati · All photographs © [PHOTOGRAPHER NAME]</span><span>Shipping · Returns · Privacy</span></div>
   </div>
 </footer>
+
+<script>
+/* Opening sequence: the newest photographs, crossfading slowly. */
+document.addEventListener('DOMContentLoaded', function () {
+  var opening = document.querySelector('.opening');
+  var slidesEl = document.getElementById('slides'), ticksEl = document.getElementById('ticks'), now = document.getElementById('now');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var DUR = 7000;
+  EC.loadPosts().then(function (data) {
+    var newest = data.posts.slice().reverse();
+    var first = data.posts.filter(function (p) { return p.id === 'fog-over-the-ohio'; })[0] || newest[0];
+    var seq = [first].concat(newest.filter(function (p) { return p !== first; })).slice(0, 5);
+    seq.slice(1).forEach(function (p) {
+      var f = document.createElement('figure'); f.className = 'slide'; f.setAttribute('data-id', p.id);
+      f.innerHTML = '<img src="' + EC.esc(p.image) + '" alt="' + EC.esc(p.alt) + '" decoding="async">';
+      slidesEl.appendChild(f);
+    });
+    var slides = slidesEl.querySelectorAll('.slide');
+    ticksEl.innerHTML = seq.map(function (p, i) { return '<button type="button" class="tick' + (i === 0 ? ' is-on' : '') + '" aria-label="Show No. ' + EC.pad(p.no) + '" style="--dur:' + DUR + 'ms">' + EC.pad(i + 1) + '<span></span></button>'; }).join('');
+    var ticks = ticksEl.querySelectorAll('.tick');
+    var i = 0, timer = null, paused = false;
+    function go(n) {
+      i = (n + seq.length) % seq.length;
+      slides.forEach(function (s, k) { s.classList.toggle('is-on', k === i); });
+      ticks.forEach(function (t, k) { t.classList.remove('is-on'); if (k === i) { void t.offsetWidth; t.classList.add('is-on'); } });
+      var p = seq[i];
+      now.innerHTML = '<span class="num" style="color:inherit">No. ' + EC.pad(p.no) + '</span><a class="now-title" href="' + EC.esc(p.story) + '">' + EC.esc(p.title) + '</a><span>' + EC.esc(p.place) + '</span>';
+      schedule();
+    }
+    function schedule() { clearTimeout(timer); if (!paused && !reduce) timer = setTimeout(function () { go(i + 1); }, DUR); }
+    ticks.forEach(function (t, k) { t.addEventListener('click', function () { go(k); }); });
+    opening.addEventListener('mouseenter', function () { paused = true; opening.classList.add('is-paused'); clearTimeout(timer); });
+    opening.addEventListener('mouseleave', function () { paused = false; opening.classList.remove('is-paused'); go(i); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) clearTimeout(timer); else schedule(); });
+    if (reduce) ticks.forEach(function (t) { t.style.setProperty('--dur', '0s'); });
+    schedule();
+  });
+});
+</script>
 </body>
 </html>

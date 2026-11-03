@@ -69,3 +69,23 @@ The map uses Leaflet (bundled in `vendor/leaflet`, BSD-2) with CARTO's light bas
 - `js/site.js` — menu, header, data loading and home-page fill-ins
 - `js/map.js` — the living map and the home-page preview
 - `dc.js` + `site.css` — tiny template runtime and legacy styles (used by `collection.html` / `studio.html`)
+
+## Build
+
+Vercel runs `npm run build` (`scripts/build.mjs`) and serves `dist/`. The build:
+
+- copies the site into `dist/`
+- generates `stories/<id>.html` and `prints/<id>.html` for every post, each with its own title, description and Open Graph/Twitter tags, so shared links preview with the right photo
+- writes `sitemap.xml` and `robots.txt`
+
+For local testing:
+
+```bash
+npm install && npm run build && cd dist && python3 -m http.server
+```
+
+Set `SITE_URL` to change the absolute origin used in share tags (it defaults to the Vercel production URL).
+
+## Photos
+
+Put full-resolution originals in `photos/`, named like the web image they replace (e.g. `photos/roebling-fog.jpg` → `img/roebling-fog.webp`). The build makes 2000px, 1280px and 640px WebP versions and lists them in `data/image-sizes.json`. If there are no originals, it just copies `img/`.

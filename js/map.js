@@ -36,18 +36,68 @@
   }
   function directions(p) { return 'https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng; }
 
+  /* Colors come from the theme (day / night), read at draw time. */
+  function cssVar(name, fallback) {
+    var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return v || fallback;
+  }
+
+  /* Neighborhood outlines, drawn in their own pane below the pins.
+     Fill opacity is set as an inline style (not the SVG attribute) so the CSS transition animates it. */
+  function hoodLayer(map, geo, interactive) {
+    if (!map.getPane('hoods')) { map.createPane('hoods'); map.getPane('hoods').style.zIndex = 350; }
+    var renderer = L.svg({ pane: 'hoods', padding: 0.5 });
+    var byName = {};
+    var layer = L.geoJSON(geo, {
+      pane: 'hoods', renderer: renderer, interactive: !!interactive,
+      style: function () { return { className: 'hood-shape', weight: 0.8, fillOpacity: 0, opacity: 0 }; },
+      onEachFeature: function (f, l) { byName[f.properties.name] = l; }
+    }).addTo(map);
+    var last = null;
+    map.whenReady(function () { setTimeout(function () { if (last) paint(last[0], last[1]); }, 0); });
+    function paint(counts, selected) {
+      last = [counts, selected];
+      var amber = cssVar('--amber', '#D9822B'), ink = cssVar('--ink', '#161719');
+      Object.keys(byName).forEach(function (name) {
+        var l = byName[name], c = counts[name] || 0, sel = name === selected;
+        l.setStyle({ color: c ? amber : ink, fillColor: amber, weight: sel ? 2.2 : (c ? 1.2 : 0.7) });
+        var el = l.getElement && l.getElement();
+        if (el) {
+          el.style.fillOpacity = c ? String(Math.min(0.18 + (c - 1) * 0.08, 0.42)) : '0';
+          el.style.strokeOpacity = sel ? '0.95' : (c ? '0.75' : '0.16');
+          el.classList.toggle('is-explored', !!c);
+        }
+      });
+    }
+    return { layer: layer, byName: byName, paint: paint };
+  }
+
   /* ---------------- Home: a quiet preview ---------------- */
   function miniMap(el) {
     EC.loadPosts().then(function (data) {
       var map = baseMap(el, { dragging: !L.Browser.mobile, touchZoom: false, scrollWheelZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, tap: false });
       var pinned = data.posts.filter(function (p) { return p.pinned; });
       var latest = pinned[pinned.length - 1];
+      var hoods = data.geo ? hoodLayer(map, data.geo, false) : null;
+      var counts = EC.explored(data);
+      if (hoods) hoods.paint(counts, null);
       pinned.forEach(function (p) {
         var m = L.marker([p.lat, p.lng], { icon: pinIcon(p), title: p.title, keyboard: false }).addTo(map);
         m.on('click', function () { location.href = 'map.html#' + p.id; });
         var e = pinEl(m); if (e && p === latest) e.classList.add('is-latest');
       });
-      fitLocal(map, data.posts, [40, 40]);
+      function fit() {
+        var b = L.latLngBounds([]);
+        if (hoods) Object.keys(counts).forEach(function (n) { if (hoods.byName[n]) b.extend(hoods.byName[n].getBounds()); });
+        data.posts.filter(isLocal).forEach(function (p) { b.extend([p.lat, p.lng]); });
+        if (b.isValid()) map.fitBounds(b.pad(0.15), { padding: [24, 24], maxZoom: 14 });
+        else map.setView(CENTER, 12);
+      }
+      fit();
+      if ('ResizeObserver' in window) {
+        var t; new ResizeObserver(function () { clearTimeout(t); t = setTimeout(function () { map.invalidateSize(); fit(); }, 120); }).observe(el);
+      }
+      document.addEventListener('ec:theme', function () { if (hoods) hoods.paint(counts, null); });
     });
   }
 
@@ -59,7 +109,7 @@
 
     EC.loadPosts().then(function (data) {
       var posts = data.posts;                       // oldest → newest
-      var state = { room: 'All', upto: posts.length - 1, selected: null, route: true, playing: null };
+      var state = { room: 'All', upto: posts.length - 1, selected: null, route: true, playing: null, hood: null };
       var map = baseMap(mapEl, { zoomControl: false, scrollWheelZoom: true, tap: true });
       L.control.zoom({ position: 'bottomright' }).addTo(map);
 
@@ -71,7 +121,34 @@
         m.on('click', function () { select(p.id, { fly: false }); });
         markers[p.id] = m;
       });
-      var route = L.polyline([], { color: '#161719', weight: 1.2, opacity: .55, dashArray: '2 6', lineCap: 'round', interactive: false }).addTo(map);
+      var route = L.polyline([], { color: cssVar('--ink', '#161719'), weight: 1.2, opacity: .55, dashArray: '2 6', lineCap: 'round', interactive: false }).addTo(map);
+
+      /* Neighborhoods: fill in as posts land in them (follows the timeline and room filter). */
+      var counts = {};
+      var hoods = data.geo ? hoodLayer(map, data.geo, true) : null;
+      if (hoods) {
+        Object.keys(hoods.byName).forEach(function (name) {
+          var l = hoods.byName[name];
+          l.bindTooltip(function () {
+            var c = counts[name] || 0;
+            return '<b>' + EC.esc(name) + '</b> · <span>' + (c ? c + (c === 1 ? ' post' : ' posts') : 'Not yet explored') + '</span>';
+          }, { sticky: true, direction: 'top', offset: [0, -10], className: 'hood-tip', opacity: 1 });
+          l.on('click', function () {
+            if (counts[name]) setHood(state.hood === name ? null : name, false);
+            else l.openTooltip();
+          });
+        });
+      }
+      function setHood(name, fit) {
+        state.hood = name;
+        render();
+        if (name && fit && hoods && hoods.byName[name]) map.fitBounds(hoods.byName[name].getBounds(), { padding: mapPad(), maxZoom: 15 });
+      }
+      $('#map-hood-filter').addEventListener('click', function (e) { if (e.target.closest('.hood-chip')) setHood(null); });
+      document.addEventListener('ec:theme', function () {
+        route.setStyle({ color: cssVar('--ink', '#161719') });
+        if (hoods) hoods.paint(counts, state.hood);
+      });
 
       /* Timeline */
       var range = $('#tl-range');
@@ -135,6 +212,9 @@
         /* Stats */
         var ex = EC.explored(data, vis);
         var exN = Object.keys(ex).length;
+        counts = ex;
+        if (state.hood && !ex[state.hood]) state.hood = null;
+        if (hoods) hoods.paint(ex, state.hood);
         $('#stat-posts').textContent = vis.length;
         $('#stat-hoods').textContent = exN;
         $('#stat-hoods-total').textContent = data.neighborhoods.length;
@@ -142,8 +222,12 @@
         $('#tl-count').textContent = 'Post ' + (state.upto + 1) + ' of ' + posts.length;
         $('#tl-fill').style.width = (posts.length > 1 ? state.upto / (posts.length - 1) * 100 : 100) + '%';
 
-        /* List, newest first */
-        $('#map-list').innerHTML = vis.slice().reverse().map(function (p) {
+        /* List, newest first (optionally narrowed to one neighborhood) */
+        var listed = state.hood ? vis.filter(function (p) { return p.neighborhood === state.hood; }) : vis;
+        $('#map-hood-filter').innerHTML = state.hood
+          ? '<button type="button" class="hood-chip" aria-label="Clear neighborhood filter: ' + EC.esc(state.hood) + '">Neighborhood: ' + EC.esc(state.hood) + ' <span aria-hidden="true">×</span></button>'
+          : '';
+        $('#map-list').innerHTML = listed.slice().reverse().map(function (p) {
           var tag = !p.pinned ? '<span class="tag">Location to come</span>' : (!isLocal(p) ? '<span class="tag">Day trip</span>' : '');
           return '<li><button type="button" class="post-row' + (p.id === state.selected ? ' is-active' : '') + '" data-id="' + EC.esc(p.id) + '">' +
             '<img src="' + EC.esc(p.image) + '" alt="" loading="lazy" decoding="async">' +
@@ -158,7 +242,8 @@
         $('#hood-bar').style.width = (exN / data.neighborhoods.length * 100) + '%';
         $('#hood-grid').innerHTML = data.neighborhoods.map(function (n) {
           var c = allEx[n];
-          return '<li class="hood' + (c ? ' is-explored' : '') + '"><span>' + EC.esc(n) + '</span>' + (c ? '<span class="hood-n">' + c + '</span>' : '') + '</li>';
+          if (!c) return '<li class="hood"><span>' + EC.esc(n) + '</span></li>';
+          return '<li class="hood is-explored' + (n === state.hood ? ' is-filtered' : '') + '"><button type="button" class="hood-btn" data-hood="' + EC.esc(n) + '"><span>' + EC.esc(n) + '</span><span class="hood-n">' + c + '</span></button></li>';
         }).join('');
         var beyond = vis.filter(function (p) { return p.neighborhood && data.neighborhoods.indexOf(p.neighborhood) === -1; });
         $('#hood-beyond').textContent = beyond.length ? 'Also beyond the city line: ' + beyond.map(function (p) { return p.place; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).join(' · ') : '';
@@ -206,6 +291,13 @@
         var b = e.target.closest('[data-id]'); if (b) select(b.getAttribute('data-id'), { scroll: true });
       });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !card.hidden) closeCard(); });
+      $('#hood-grid').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-hood]'); if (!b) return;
+        var name = b.getAttribute('data-hood');
+        var view = document.querySelector('.mapview') || mapEl;
+        view.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setHood(name, true);
+      });
 
       render();
       fitLocal(map, posts, mapPad());

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F3F0E8">
+<script src="js/theme-init.js"></script>
 <title>Roebling, in the fog — Print · explore.cincinnati</title>
 <meta name="description" content="Archival pigment print, signed and numbered — choose a size, paper and frame. explore.cincinnati.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,20 +19,30 @@
   .crumbs a:hover { color: var(--ink); }
   .crumbs [aria-current] { color: var(--ink); }
 
-  /* The wall */
-  .stage { position: relative; aspect-ratio: 5 / 4; overflow: hidden; border-radius: 3px; background: var(--paper-2); display: flex; align-items: center; justify-content: center; transition: background .5s var(--ease); }
-  .stage.is-print { background: var(--white); }
-  .stage-light { position: absolute; top: -10%; left: 50%; width: 80%; height: 75%; transform: translateX(-50%); background: radial-gradient(ellipse at top, rgba(255,250,235,.9), rgba(255,250,235,0) 70%); pointer-events: none; transition: opacity .5s; }
-  .stage-floor { position: absolute; left: 0; right: 0; bottom: 0; height: 13%; background: linear-gradient(var(--paper-3), #D6D0C2); transition: opacity .5s; }
-  .stage-bench { position: absolute; bottom: 13%; left: 50%; width: 44%; height: 3.2%; transform: translateX(-50%); background: #2A2724; border-radius: 2px; transition: opacity .5s; }
-  .stage-bench::before, .stage-bench::after { content: ""; position: absolute; top: 100%; width: 2.5%; height: 330%; background: #2A2724; }
+  /* The wall: the same room as the collection — plaster, window light, skirting, oak */
+  .stage { position: relative; isolation: isolate; aspect-ratio: 5 / 4; overflow: hidden; background: #E3DCCF; display: flex; align-items: center; justify-content: center; transition: background .5s var(--ease); }
+  .stage::before { content: ""; position: absolute; inset: 0 0 13% 0; z-index: -2; background-color: #E3DCCF; background-image: linear-gradient(to bottom, rgba(70,52,34,.10), rgba(70,52,34,0) 25%, rgba(70,52,34,0) 75%, rgba(70,52,34,.12)), url("img/limewash.svg"); background-size: auto, 640px 640px; transition: opacity .5s, filter 1s var(--ease); }
+  .stage::after { content: ""; position: absolute; inset: 0 0 13% 0; z-index: -1; background: url("img/window-light.svg") -40% 0 / auto 100% no-repeat; mix-blend-mode: soft-light; filter: contrast(1.15); transition: opacity .8s; pointer-events: none; }
+  .stage.is-print { background: #FBFAF6; }
+  .stage.is-print::before, .stage.is-print::after { opacity: 0; }
+  .stage-light { position: absolute; top: -10%; left: 50%; width: 80%; height: 75%; transform: translateX(-50%); z-index: -1; background: radial-gradient(ellipse at top, rgba(255,250,235,.55), rgba(255,250,235,0) 70%); pointer-events: none; transition: opacity .5s, background .8s; }
+  .stage-floor { position: absolute; left: 0; right: 0; bottom: 0; height: 13%; z-index: -1; background-color: #B88E62; background-image: linear-gradient(to bottom, rgba(36,22,10,.42), rgba(36,22,10,.08) 30%, rgba(36,22,10,.14)), url("img/floor-oak.svg"); background-size: auto, 900px 100%; border-top: 7px solid #F1EDE5; box-shadow: 0 -1px 0 rgba(70,52,34,.25); transition: opacity .5s, filter 1s var(--ease); }
+  .stage-bench { position: absolute; bottom: 13%; left: 50%; width: 44%; height: 3.4%; transform: translateX(-50%); background: linear-gradient(#5A3E26, #3B2817); border-radius: 1px; box-shadow: 0 2px 0 rgba(0,0,0,.15); transition: opacity .5s; }
+  .stage-bench::before, .stage-bench::after { content: ""; position: absolute; top: 100%; width: 2.5%; height: 330%; background: #33231A; }
   .stage-bench::before { left: 6%; } .stage-bench::after { right: 6%; }
   .stage.is-print .stage-light, .stage.is-print .stage-floor, .stage.is-print .stage-bench { opacity: 0; }
+  /* After dark: plaster dims, the window goes out, a picture light comes on over the print */
+  html[data-theme="night"] .stage { background: #1E1B17; }
+  html[data-theme="night"] .stage::before { filter: brightness(.34) saturate(.8); }
+  html[data-theme="night"] .stage::after { opacity: 0; }
+  html[data-theme="night"] .stage-floor { filter: brightness(.42); }
+  html[data-theme="night"] .stage-light { background: radial-gradient(45% 62% at 50% 0%, rgba(255,214,160,.5), rgba(255,196,130,.14) 50%, rgba(255,196,130,0) 75%); }
+  html[data-theme="night"] .stage.is-print { background: #E9E4D8; }
   .art { --w: 31; position: relative; z-index: 1; margin-bottom: 8%; width: calc(var(--w) * 1%); background: #F7F5EF; border: 0 solid transparent; box-shadow: 0 1px 2px rgba(22,23,25,.08), 0 30px 50px -18px rgba(22,23,25,.45); transition: width .6s var(--ease), border .4s var(--ease), padding .4s var(--ease), background .4s, margin .5s var(--ease); }
   .stage.is-print .art { margin-bottom: 0; width: 46% !important; box-shadow: 0 1px 2px rgba(22,23,25,.08), 0 20px 40px -20px rgba(22,23,25,.3); }
   .art img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
   .art.is-gloss::after { content: ""; position: absolute; inset: 0; background: linear-gradient(125deg, rgba(255,255,255,.22), rgba(255,255,255,0) 40%); pointer-events: none; }
-  .view-toggle { position: absolute; top: 16px; left: 16px; z-index: 2; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(243,240,232,.9); border: 1px solid var(--rule); }
+  .view-toggle { --ink: #161719; --paper: #F3F0E8; --rule: rgba(22,23,25,.14); --rule-strong: rgba(22,23,25,.28); color: #161719; position: absolute; top: 16px; left: 16px; z-index: 2; display: flex; gap: 4px; padding: 4px; background: rgba(243,240,232,.92); border: 1px solid rgba(22,23,25,.14); }
   .view-toggle .chip { height: 34px; border-color: transparent; }
   .stage-cap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 24px; padding-top: 14px; }
   .stage-cap strong { font-weight: 600; color: var(--ink); }
@@ -106,16 +117,16 @@
 
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="brand" href="index.html" aria-label="explore.cincinnati, home"><span class="brand-dot" aria-hidden="true"></span>explore.cincinnati</a>
+    <a class="brand" href="index.html" aria-label="explore.cincinnati, home"><span class="brand-dot" aria-hidden="true"></span><span class="brand-name">explore<span class="brand-sep">.</span>cincinnati</span></a>
     <nav id="primary-nav" class="nav" aria-label="Primary">
-      <a href="collection.html" aria-current="page"><span class="nav-num">01</span>Collection</a>
-      <a href="collection.html#stories"><span class="nav-num">02</span>Stories</a>
-      <a href="map.html"><span class="nav-num">03</span>Map</a>
-      <a href="index.html#about"><span class="nav-num">04</span>About</a>
+      <a href="collection.html" aria-current="page">Works</a>
+      <a href="map.html">Map</a>
+      <a href="collection.html#stories">Stories</a>
     </nav>
     <div class="header-actions">
-      <a class="cart" href="print.html">Cart <span class="cart-count">0</span></a>
-      <button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path class="m1" d="M4 8.5h16"/><path class="m2" d="M4 15.5h16"/></svg></button>
+      <button type="button" class="lights" aria-pressed="false" aria-label="Lights: switch between day and night" title="Lights"><span class="lights-lamp" aria-hidden="true"></span></button>
+      <button type="button" class="index-toggle" aria-expanded="false" aria-controls="index-panel"><span>Index</span><span class="index-count" aria-hidden="true"></span></button>
+      <a class="cart" href="print.html" aria-label="Cart">Cart <span class="cart-count">0</span></a>
     </div>
   </div>
 </header>
@@ -130,7 +141,7 @@
         <span class="stage-floor" aria-hidden="true"></span>
         <span class="stage-bench" aria-hidden="true"></span>
         <div class="art" id="art">
-          <img id="art-img" src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog" fetchpriority="high">
+          <img id="art-img" class="vt-photo" src="img/roebling-fog.webp" alt="Roebling Suspension Bridge tower lit amber in thick fog" fetchpriority="high">
         </div>
         <div class="view-toggle" role="group" aria-label="Preview">
           <button type="button" class="chip" data-view="wall" aria-pressed="true">On a wall</button>
@@ -314,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function () {
   render();
 
   /* Fill the page from posts.json for ?id= (default: the Roebling print). */
-  var id = new URLSearchParams(location.search).get('id') || 'roebling-fog';
+  var id = window.EC_POST_ID || new URLSearchParams(location.search).get('id') || 'roebling-fog';
   if (!window.EC || !EC.loadPosts) return;
   EC.loadPosts().then(function (data) {
     var p = data.posts.filter(function (x) { return x.id === id; })[0];
