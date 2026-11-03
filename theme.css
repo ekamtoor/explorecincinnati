@@ -17,8 +17,8 @@
   --rule-strong: rgba(22, 23, 25, 0.28);
   --amber: #D9822B;          /* the Roebling lamps — pins, dots, highlights */
   --amber-ink: #8A4A10;      /* amber that is legible as small text */
-  --serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
-  --sans: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --serif: 'Cormorant Garamond', 'Cormorant', Garamond, 'Iowan Old Style', Georgia, serif;
+  --sans: 'Jost', 'Futura', 'Avenir Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --gutter: clamp(20px, 4vw, 56px);
   --max: 1440px;
   --header-h: 72px;

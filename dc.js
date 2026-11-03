@@ -105,8 +105,10 @@
       var scope = inst.renderVals() || {};
       var frag = document.createElement('div');
       for (var i = 0; i < tpl.childNodes.length; i++) renderInto(tpl.childNodes[i], scope, frag);
-      if (!app.firstChild) app.replaceChildren.apply(app, Array.prototype.slice.call(frag.childNodes));
+      var first = !app.firstChild;
+      if (first) app.replaceChildren.apply(app, Array.prototype.slice.call(frag.childNodes));
       else morphChildren(app, frag);
+      if (!first && inst.componentDidUpdate) inst.componentDidUpdate();
     }
     DC._rerender = draw;
     draw();
