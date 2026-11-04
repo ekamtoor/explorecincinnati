@@ -1,0 +1,7 @@
+/* Neighborhood polygons + tooltips — used by the living map and the home-page preview. */
+.hood-shape { transition: fill-opacity .8s var(--ease), stroke-opacity .8s var(--ease), stroke-width .3s; }
+.hood-shape.is-explored { cursor: pointer; }
+.leaflet-tooltip.hood-tip { padding: 5px 10px; border: 1px solid var(--rule); border-radius: 0; background: var(--paper); color: var(--ink); box-shadow: 0 6px 20px -8px rgba(22,23,25,.35); font-family: var(--sans); font-size: .68rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; }
+.leaflet-tooltip.hood-tip::before { display: none; }
+.hood-tip b { font-weight: 600; color: var(--ink); }
+.hood-tip span { color: var(--muted); }
